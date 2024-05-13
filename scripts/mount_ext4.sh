@@ -3,7 +3,7 @@
 ################################################################################
 # Description: mounts the specified ext4 block device to /the_binding
 # Author: Vivek Revankar <vivek@master-hax.com>
-# Usage: ./mount_ext.sh <BLOCK_DEVICE_PATH>
+# Usage: ./mount_ext4.sh <BLOCK_DEVICE_PATH>
 ################################################################################
 
 if [ "$(readlink /proc/self/ns/mnt)" != "$(readlink /proc/1/ns/mnt)" ]; then
