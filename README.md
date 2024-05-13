@@ -4,7 +4,7 @@ tools to help backup media via the original google pixel
 
 **WARNING: this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.**
 
-i figured out a way to mount ext4 drives into the pixel's internal storage where it can be seen by installed apps. specifically, google photos.
+i figured out a way to mount external drives into the pixel's internal storage where it can be seen by installed apps. specifically, google photos. currently only ext4 drives are supported but the same process should work for fat32.
 
 this method requires root access, but otherwise works with the stock kernel.
 
