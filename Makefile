@@ -9,6 +9,6 @@ scripts/enable_tcp_debugging.sh \
 scripts/disable_tcp_debugging.sh \
 
 release: $(SCRIPTS)
-	tar -czvf pixel-backup-gang-$(VERSION).tar.gz --transform='s,^scripts/,pixel-backup-gang-$(VERSION)/,' $^
+	tar -czvf pixel-backup-gang-$(VERSION).tar.gz --transform='s,^scripts/,pixel-backup-gang/,' $^
 clean:
 	rm -f pixel-backup-gang-$(VERSION).tar.gz
