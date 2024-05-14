@@ -12,7 +12,24 @@ here is a demo image of a portable SSD enclosure mounted into the internal stora
 
 ![image](assets/demo.jpg)
 
-## instructions
+## requirements
+* a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with magisk. may work on other phones.
+* an USB storage drive formatted with an ext4 filesystem. other filesystems not currently supported.
+
+## installation
+
+### via adb (with a PC)
+1. install Android Debug Bridge (adb) & connect the pixel
+1. clone this repository
+1. run `make mobile-install`
+   * if your pixel has termux installed, you can install the scripts to the tmux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
+   * if you are running these steps on WSL, you should use the adb executable from windows (which has USB support) with `make mobile-install HOST_ADB_COMMAND=/mnt/c/Users/someone/AppData/Local/Android/Sdk/platform-tools/adb.exe`
+
+### via terminal (on the pixel)
 TODO
+
+## usage
+TODO
+
 ## notes
 TODO
