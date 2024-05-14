@@ -13,7 +13,7 @@ here is a demo image of a portable SSD enclosure mounted into the internal stora
 ![image](assets/demo.jpg)
 
 ## prerequisites
-* a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with magisk. may work on other phones.
+* a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with [Magisk](https://github.com/topjohnwu/Magisk). may work on other phones.
 * a USB storage drive formatted with an ext4 filesystem. other filesystems not currently supported.
 
 ## installation
@@ -31,16 +31,15 @@ TODO
 
 ## usage
 
-1. connect the ext4 formatted external drive to the pixel
-   * you should get an os notification that says the drive is not supported
-     * if you click on this, it directs you to format the drive in fat32. you probably don't want to do this
-     * you can safely ignore or clear this notification
-1. start a shell & navigate into the installation directory
+start a shell & navigate into the installation directory
   * from the device: launch Termux, AOSP Terminal, or some other terminal app to run the scripts directly from the device
   * from a PC: run `adb shell`
 
 ### mounting
-
+1. connect the ext4 formatted external drive to the pixel
+   * you should get an os notification that says the drive is not supported
+     * if you click on this, it directs you to format the drive in fat32. you probably don't want to do this
+     * you can safely ignore or clear this notification
 1. find the block device that you want to mount
    * it is usually at `/dev/block/sdg1` but changes when devices are connected/disconnected
    * if you don't know the filesystem UUID, use `./show_devices.sh`
