@@ -12,6 +12,8 @@ i first tried using FUSE (filesystem in user space) based solutions like [bindfs
 
 this method is basically a hack around the selinux policies + app permissions using the plain old `mount` command.
 
+(if you don't care about using these scripts and just want to see how it's done, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
+
 ## the good
 * works with the stock kernel
 * backs up external files larger than 4gb (stock OS only supports FAT32 for external drives)
@@ -41,7 +43,7 @@ anyway here is a demo image of a portable SSD enclosure mounted into the interna
 1. clone this repository
 1. run `make mobile-install`
    * installs the scripts to `/data/local/tmp` by default
-   * if your pixel has Termux installed, you can install the scripts to the tmux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
+   * if your pixel has Termux installed, you can install the scripts to the Termux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
    * if you are running these steps on WSL, you should use the adb executable from windows (which has USB support) with `make mobile-install HOST_ADB_COMMAND=/mnt/c/Users/someone/AppData/Local/Android/Sdk/platform-tools/adb.exe`
 
 ### via terminal (on the pixel)
