@@ -4,7 +4,9 @@ mount ext4 drives into the google pixel's internal storage
 
 **WARNING: this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.**
 
-the main goal is to allow for backing up of external media in Google Photos via the original Google Pixel phones which have an unlimited storage benefit.
+## why?
+
+the main goal is to allow for easy backup of external media via Google Photos on original Google Pixel phones, which which have an unlimited storage benefit. every method i've seen 
 
 i tried using FUSE based solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (i built my own minimal version in Rust) but the performance was unacceptable.
 
