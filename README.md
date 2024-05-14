@@ -54,26 +54,26 @@ TODO
     * from a PC
       * run `adb shell`
       * allow sudo access to the shell process in Magisk
-1. run `./start_global_shell` to enter the global mount namespace
+1. run `./start_global_shell.sh` to enter the global mount namespace
     * you may not need this step if you use Magisk to force the global mount namespace
 
 ### mounting
 1. connect the ext4 formatted external drive to the pixel
    * you should get an os notification that says the drive is not supported
-     * if you click on this, it directs you to format the drive in fat32. you probably don't want to do this
+     * if you click on this, it directs you to format the drive in FAT32. you probably don't want to do this
      * you can safely ignore or clear this notification
 1. find the block device that you want to mount
    * it is usually at `/dev/block/sdg1` but changes when devices are connected/disconnected
    * if you don't know the filesystem UUID, use `./show_devices.sh`
    * if you know the filesystem UUID, use `./find_device.sh`
-1. run `./mount_ext4 <BLOCK_DEVICE>`
+1. run `./mount_ext4.sh <BLOCK_DEVICE>`
 
 **everything located under `/the_binding` on the external drive should now be visible by apps at `/the_binding` in the internal storage**
 
 ### unmounting
 
 1. make sure nothing important is reading from or writing to the drive
-2. run `./unmount`
+2. run `./unmount.sh`
 
 **everything located under `/the_binding` in the internal storage should now be gone. you can safely disconnect the drive.**
 
