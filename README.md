@@ -1,14 +1,27 @@
 # pixel backup gang
 
-tools to help backup media via the original google pixel
+mount ext4 drives into the google pixel's internal storage
 
 **WARNING: this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.**
 
-i figured out a way to mount external drives into the pixel's internal storage where it can be seen by installed apps. specifically, google photos. currently only ext4 drives are supported but the same process should work for fat32.
+the main goal is to allow for backing up of external media in Google Photos via the original Google Pixel phones which have an unlimited storage benefit.
 
-this method requires root access, but otherwise works with the stock kernel.
+i tried using FUSE based solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (i built my own minimal version in Rust) but the performance was unacceptable.
 
-here is a demo image of a portable SSD enclosure mounted into the internal storage on my Pixel XL:
+this method is basically a hack around the selinux policies + app permissions that allows for regular `mount` commands to work.
+
+## the good
+* adds support for external ext4 drives (stock operating system only supports external FAT32)
+* works with the stock kernel
+
+## the bad
+* phone needs to be rooted
+
+## the ugly
+* there's no GUI, you need to execute shell scripts
+
+
+anyway here is a demo image of a portable SSD enclosure mounted into the internal storage on my Pixel XL. the data is readable & writable in the Google Photos app.
 
 ![image](assets/demo.jpg)
 
