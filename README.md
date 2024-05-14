@@ -13,11 +13,14 @@ i first tried using FUSE (filesystem in user space) based solutions like [bindfs
 this method is basically a hack around the selinux policies + app permissions using the plain old `mount` command.
 
 ## the good
-* adds support for external ext4 drives (stock operating system only supports external FAT32)
 * works with the stock kernel
+* backs up external files larger than 4gb (stock OS only supports FAT32 for external drives)
+* reduces wear on internal flash storage
+* prevents device from overheating - the external drive gets hot instead
 
 ## the bad
 * phone needs to be rooted
+* there's currently no way to auto-mount when the disk is connected
 
 ## the ugly
 * there's no GUI, you need to execute shell scripts
