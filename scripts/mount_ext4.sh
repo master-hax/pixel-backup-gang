@@ -14,9 +14,9 @@ fi
 mkdir -p -v /mnt/my_drive
 mount -t ext4 -o nosuid,nodev,noexec,noatime $1 /mnt/my_drive
 
+mkdir -p -v /mnt/my_drive/the_binding
 chmod -R 777 /mnt/my_drive
 chown -R sdcard_rw:sdcard_rw /mnt/my_drive
-mkdir -p -v /mnt/my_drive/the_binding
 
 # may be possible to avoid this by mounting to /mnt/expand/<uuid>
 setenforce 0
