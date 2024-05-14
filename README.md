@@ -23,7 +23,7 @@ here is a demo image of a portable SSD enclosure mounted into the internal stora
 1. clone this repository
 1. run `make mobile-install`
    * installs the scripts to `/data/local/tmp` by default
-   * if your pixel has termux installed, you can install the scripts to the tmux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
+   * if your pixel has Termux installed, you can install the scripts to the tmux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
    * if you are running these steps on WSL, you should use the adb executable from windows (which has USB support) with `make mobile-install HOST_ADB_COMMAND=/mnt/c/Users/someone/AppData/Local/Android/Sdk/platform-tools/adb.exe`
 
 ### via terminal (on the pixel)
@@ -31,9 +31,16 @@ TODO
 
 ## usage
 
-start a shell & navigate into the installation directory
-  * from the device: launch Termux, AOSP Terminal, or some other terminal app to run the scripts directly from the device
-  * from a PC: run `adb shell`
+### setup
+1. start a shell on the device & navigate to the installation directory
+    * from the device
+      * launch [Terminal](https://android.googlesource.com/platform/packages/apps/Terminal/), [Termux](https://github.com/termux/termux-app), [JuiceSSH](https://play.google.com/store/apps/details?id=com.sonelli.juicessh), or some other terminal app
+      * allow sudo access to your terminal app in Magisk
+    * from a PC
+      * run `adb shell`
+      * allow sudo access to the shell process in Magisk
+1. run `./start_global_shell` to enter the global mount namespace
+    * you may not need this step if you use Magisk to force the global mount namespace
 
 ### mounting
 1. connect the ext4 formatted external drive to the pixel
@@ -46,14 +53,14 @@ start a shell & navigate into the installation directory
    * if you know the filesystem UUID, use `./find_device.sh`
 1. run `./mount_ext4 <BLOCK_DEVICE>`
 
-everything located under `/the_binding` on the external drive should now be visible by apps at `/the_binding` in the internal storage
+**everything located under `/the_binding` on the external drive should now be visible by apps at `/the_binding` in the internal storage**
 
 ### unmounting
 
 1. make sure nothing important is reading from or writing to the drive
 2. run `./unmount`
 
-`/the_binding` should now still be visible to apps in internal storage, but will be empty 
+**everything located under `/the_binding` in the internal storage should now be gone. you can safely disconnect the drive.**
 
 ## notes
 TODO
