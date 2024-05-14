@@ -6,4 +6,4 @@
 # Usage: ./enable_tcp_debugging.sh <PORT>
 ################################################################################
 
-setprop service.adb.tcp.port $0
+setprop service.adb.tcp.port $1
