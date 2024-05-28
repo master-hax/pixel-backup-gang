@@ -2,6 +2,7 @@ name: ci
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
@@ -13,5 +14,6 @@ jobs:
         run: make VERSION=$(git rev-parse --short HEAD)
       - name: Release
         uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: "pixel-backup-gang-*.tar.gz"
