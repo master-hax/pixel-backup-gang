@@ -19,6 +19,7 @@ chmod -R 777 /mnt/my_drive
 chown -R sdcard_rw:sdcard_rw /mnt/my_drive
 
 # may be possible to avoid this by mounting to /mnt/expand/<uuid>
+# TODO: use magiskpolicy https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#magiskpolicy
 setenforce 0
 
 mkdir -p -v /mnt/runtime/write/emulated/0/the_binding
