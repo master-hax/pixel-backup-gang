@@ -71,7 +71,7 @@ installation is essentially just copying the scripts to the device & making them
 1. find the block device that you want to mount. it is usually found at `/dev/block/sdg1` but changes when devices are connected and disconnected.
    * if you don't know the filesystem UUID, use `./show_devices.sh`
    * if you know the filesystem UUID, use `./find_device.sh`
-1. run `./mount_ext4.sh <BLOCK_DEVICE>`
+1. run `./mount_ext4.sh <BLOCK_DEVICE>` e.g. `./mount_ext4.sh /dev/block/sdg1`
 
 **everything located under `/the_binding` on the external drive should now be visible by apps at `/the_binding` in the internal storage**
 
