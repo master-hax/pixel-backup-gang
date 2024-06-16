@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/system/bin/sh -e
 
 ################################################################################
 # Description: install the latest version of pixel-backup to the local directory
