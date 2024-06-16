@@ -3,7 +3,7 @@
 ################################################################################
 # Description: install the latest version of pixel-backup to the local directory
 # Author: Vivek Revankar <vivek@master-hax.com>
-# Usage: curl -fl https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh | sh
+# Usage: sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"
 ################################################################################
 
 pbg_tarball_url="https://github.com/master-hax/pixel-backup-gang/releases/download/0.0.2/pixel-backup-gang-0.0.2.tar.gz"
