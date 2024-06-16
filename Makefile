@@ -39,4 +39,4 @@ clean:
 	rm -f pixel-backup-gang-*.tar.gz
 
 pixel-backup-gang-$(PBG_VERSION).tar.gz: $(ALL_SCRIPTS)
-	tar -czvf $@ --transform='s,^scripts/,pixel-backup-gang-$(PBG_VERSION)/,' $^
+	tar -czvf $@ --transform='s,^scripts/,pixel-backup-gang/,' $^
