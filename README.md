@@ -37,15 +37,18 @@ this method is basically a hack around the selinux policies + app permissions us
 
 ## installation
 
-### via adb (with a PC)
+installation is essentially just copying the scripts to the device & making them executable. you can do this manually, or use one of the automated steps below.
+
+### via pixel terminal
+1. start a terminal application and navigate to the directory where you want to install the scripts
+1. run the following command `sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"`
+
+### via linux pc using adb
 1. install Android Debug Bridge (adb) & connect the pixel
 1. clone this repository
 1. run `make mobile-install`. this installs the scripts to `/data/local/tmp` by default.
    * if your pixel has Termux installed, you can install the scripts to the Termux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
    * if you are running these steps on WSL, you should use the adb executable from windows (which has USB support) with `make mobile-install HOST_ADB_COMMAND=/mnt/c/Users/someone/AppData/Local/Android/Sdk/platform-tools/adb.exe`
-
-### via terminal (on the pixel)
-TODO
 
 ## usage
 
@@ -75,7 +78,7 @@ TODO
 1. make sure nothing important is reading from or writing to the drive
 2. run `./unmount.sh`
 
-**everything located under `/the_binding` in the internal storage should now be gone. you can safely disconnect the drive.**
+**everything located under `/the_binding` in the internal storage should now be gone. you can disconnect the drive if you're sure all pending writes have been flushed.**
 
 ## notes
 TODO
