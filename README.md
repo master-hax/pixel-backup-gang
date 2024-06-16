@@ -41,7 +41,9 @@ installation is essentially just copying the scripts to the device & making them
 
 ### via pixel terminal
 1. start a terminal application and navigate to the directory where you want to install the scripts
-1. run the following command `sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"`
+1. run the following command:
+
+```sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"```
 
 ### via linux pc using adb
 1. install Android Debug Bridge (adb) & connect the pixel
