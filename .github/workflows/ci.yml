@@ -16,6 +16,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          prerelease: true
+          prerelease: false
           files: "pixel-backup-gang-*.tar.gz"
           token: ${{ secrets.MY_GITHUB_TOKEN }}
