@@ -58,10 +58,10 @@ installation is essentially just copying the scripts to the device & making them
 1. start a shell on the device & navigate to the installation directory
     * from the device
       * launch [Terminal](https://android.googlesource.com/platform/packages/apps/Terminal/), [Termux](https://github.com/termux/termux-app), [JuiceSSH](https://play.google.com/store/apps/details?id=com.sonelli.juicessh), or some other terminal app
-      * allow sudo access to your terminal app in Magisk
+      * run `su` then allow sudo access to your terminal app in Magisk
     * from a PC
       * run `adb shell`
-      * allow sudo access to the shell process in Magisk
+      * run `su` then allow sudo access to the shell process in Magisk
 1. run `./start_global_shell.sh` to enter the global mount namespace
     * you may not need this step if you use Magisk to force the global mount namespace
 
