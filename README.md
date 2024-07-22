@@ -23,6 +23,7 @@ this method is basically a hack around the selinux policies + app permissions us
 * backs up external files larger than 4gb (stock OS only supports FAT32 for external drives)
 * reduces wear on internal flash storage
 * prevents device from overheating - the external drive gets hot instead
+* makes 32gb pixels viable for mass backup
 
 ## the bad
 * phone needs to be rooted
