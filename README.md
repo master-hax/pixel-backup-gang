@@ -64,7 +64,7 @@ installation is essentially just copying the scripts to the device & making them
       * run `adb shell`
       * run `su` then allow sudo access to the shell process in Magisk
 1. run `./start_global_shell.sh` to enter the global mount namespace
-    * you may not need this step if you use Magisk to force the global mount namespace
+    * the Magisk "force the global mount namespace" doesn't work - maybe it only works for magisk modules?
 
 ### mounting
 1. connect the ext4 formatted external drive to the pixel. you should get an os notification that says the drive is not supported. clear or ignore this notification.
