@@ -38,7 +38,7 @@ this method is basically a hack around the selinux policies + app permissions us
 
 ## installation
 
-installation is essentially just copying the scripts to the device & making them executable. you can do this manually, or use one of the automated steps below.
+installation is essentially just copying the scripts to the device & making them executable. you can do this manually, or use one of the automated steps below. you also probably want to disable [Google Play Protect](https://developers.google.com/android/play-protect) scanning in the Play Store menu.
 
 ### via pixel terminal
 1. start a terminal application and navigate to the directory where you want to install the scripts
