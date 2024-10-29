@@ -14,6 +14,7 @@ DEVICE_TEMP_DIRECTORY := /data/local/tmp
 
 ALL_SCRIPTS := \
 scripts/mount_ext4.sh \
+scripts/mount_folder.sh \
 scripts/unmount.sh \
 scripts/find_device.sh \
 scripts/show_devices.sh \
