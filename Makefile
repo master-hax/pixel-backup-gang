@@ -14,6 +14,7 @@ DEVICE_TEMP_DIRECTORY := /data/local/tmp
 
 ALL_SCRIPTS := \
 scripts/mount_ext4.sh \
+scripts/remount_vfat.sh \
 scripts/unmount.sh \
 scripts/find_device.sh \
 scripts/show_devices.sh \
@@ -29,10 +30,10 @@ mobile-install: pixel-backup-gang-$(PBG_VERSION).tar.gz
 	# copy the tarball containing scripts
 	$(HOST_ADB_COMMAND) push ./pixel-backup-gang-$(PBG_VERSION).tar.gz $(DEVICE_TEMP_DIRECTORY)
 	# extract the scripts
-	$(HOST_ADB_COMMAND) shell /sbin/su --command 'tar -xvf $(DEVICE_TEMP_DIRECTORY)/pixel-backup-gang-$(PBG_VERSION).tar.gz -C $(DEVICE_INSTALL_DIRECTORY)'
+	$(HOST_ADB_COMMAND) shell su --command 'tar -xvf $(DEVICE_TEMP_DIRECTORY)/pixel-backup-gang-$(PBG_VERSION).tar.gz -C $(DEVICE_INSTALL_DIRECTORY)'
 	# make the scripts executable
-	$(HOST_ADB_COMMAND) shell /sbin/su --command 'chmod +x $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang-$(PBG_VERSION)/*.sh'
-	# done, installed scripts to $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang-$(PBG_VERSION)
+	$(HOST_ADB_COMMAND) shell su --command 'chmod +x $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang/*.sh'
+	# done, installed scripts to $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang
 
 .PHONY: clean
 clean:
