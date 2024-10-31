@@ -7,7 +7,6 @@
 # Example: ./remount_vfat.sh /mnt/media_rw/2IDK-11F4
 ################################################################################
 
-
 if [ "$(readlink /proc/self/ns/mnt)" != "$(readlink /proc/1/ns/mnt)" ]; then
   echo "not running in global mount namespace, try elevating first"
   exit 1
