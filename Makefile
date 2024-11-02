@@ -22,6 +22,9 @@ scripts/enable_tcp_debugging.sh \
 scripts/disable_tcp_debugging.sh \
 scripts/start_global_shell.sh \
 
+pixel-backup-gang-$(PBG_VERSION).tar.gz: $(ALL_SCRIPTS)
+	tar --owner=0 --group=0 -czvf $@ --transform='s,^scripts/,pixel-backup-gang/,' $^
+
 .PHONY: release
 release: pixel-backup-gang-$(PBG_VERSION).tar.gz
 
@@ -35,9 +38,10 @@ mobile-install: pixel-backup-gang-$(PBG_VERSION).tar.gz
 	$(HOST_ADB_COMMAND) shell su --command 'chmod +x $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang/*.sh'
 	# done, installed scripts to $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang
 
+.PHONY: shellcheck
+shellcheck: $(ALL_SCRIPTS)
+	shellcheck --shell=sh --severity=style --check-sourced $^
+
 .PHONY: clean
 clean:
 	rm -f pixel-backup-gang-*.tar.gz
-
-pixel-backup-gang-$(PBG_VERSION).tar.gz: $(ALL_SCRIPTS)
-	tar --owner=0 --group=0 -czvf $@ --transform='s,^scripts/,pixel-backup-gang/,' $^
