@@ -10,8 +10,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Shellcheck
+        run: sudo apt-get install -y shellcheck && make shellcheck
       - name: Build
-        run: make PBG_VERSION=${{  github.ref_name }}
+        run: make PBG_VERSION=${{ github.ref_name }}
       - name: Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
