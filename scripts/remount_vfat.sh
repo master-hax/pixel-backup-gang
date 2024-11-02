@@ -27,7 +27,7 @@ if [ ! -d "$mounted_drive_path" ]; then
   exit 1
 fi
 
-fs_type=$(stat -f -c %T $mounted_drive_path)
+fs_type=$(stat -f -c %T "$mounted_drive_path")
 if [ "$fs_type" != "msdos" ]; then
     echo "detected filesystem type was not 'msdos', found $fs_type"
     exit 1
