@@ -1,6 +1,7 @@
 # pixel backup gang
 
-mount ext4 drives into the google pixel's internal storage
+mount ext4 drives & remount fat32 drives into the google pixel's internal storage
+
 
 **WARNING: this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.**
 
