@@ -22,14 +22,23 @@ scripts/enable_tcp_debugging.sh \
 scripts/disable_tcp_debugging.sh \
 scripts/start_global_shell.sh \
 
+.PHONY: release
+release: shellcheck pixel-backup-gang-$(PBG_VERSION).tar.gz
+
+.PHONY: shellcheck
+shellcheck: $(ALL_SCRIPTS)
+	shellcheck --shell=sh --severity=style --check-sourced $^
+
 pixel-backup-gang-$(PBG_VERSION).tar.gz: $(ALL_SCRIPTS)
 	tar --owner=0 --group=0 -czvf $@ --transform='s,^scripts/,pixel-backup-gang/,' $^
 
-.PHONY: release
-release: pixel-backup-gang-$(PBG_VERSION).tar.gz
+.PHONY: clean
+clean:
+	rm -f pixel-backup-gang-*.tar.gz
 
+# utility to install to the device connected over adb
 .PHONY: mobile-install
-mobile-install: pixel-backup-gang-$(PBG_VERSION).tar.gz
+mobile-install: release
 	# copy the tarball containing scripts
 	$(HOST_ADB_COMMAND) push ./pixel-backup-gang-$(PBG_VERSION).tar.gz $(DEVICE_TEMP_DIRECTORY)
 	# extract the scripts
@@ -37,11 +46,3 @@ mobile-install: pixel-backup-gang-$(PBG_VERSION).tar.gz
 	# make the scripts executable
 	$(HOST_ADB_COMMAND) shell su --command 'chmod +x $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang/*.sh'
 	# done, installed scripts to $(DEVICE_INSTALL_DIRECTORY)/pixel-backup-gang
-
-.PHONY: shellcheck
-shellcheck: $(ALL_SCRIPTS)
-	shellcheck --shell=sh --severity=style --check-sourced $^
-
-.PHONY: clean
-clean:
-	rm -f pixel-backup-gang-*.tar.gz
