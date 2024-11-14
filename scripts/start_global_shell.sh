@@ -7,7 +7,13 @@
 ################################################################################
 
 if [ "$(readlink /proc/self/ns/mnt)" != "$(readlink /proc/1/ns/mnt)" ]; then
-  nsenter -t 1 -m -- /bin/sh -c "cd $PWD && echo 'now running in global mount namespace 👍' && /bin/sh"
+  nsenter -t 1 -m -- "$SHELL" -c \
+"
+  cd $PWD \
+  && echo 'entering global mount namespace 🌐' \
+  && $SHELL \
+  && echo 'exiting global mount namespace 👋' \
+"
 else
   echo 'already running in global mount namespace 🤔'
 fi
