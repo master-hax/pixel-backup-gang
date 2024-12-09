@@ -47,6 +47,8 @@ installation is essentially just copying the scripts to the device & making them
 
 ```sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"```
 
+this one-liner runs a small installer script that downloads the latest release archive from github, unpacks it, then makes the contents executable. the current install script can be viewed [here](https://github.com/master-hax/pixel-backup-gang/blob/install/install.sh). piping strange scripts from the web into a root shell is generally not a good idea, but it is convenient. try not to make a habit of it. 😅
+
 ### via linux pc using adb
 1. install Android Debug Bridge (adb) & connect the pixel
 1. clone this repository
