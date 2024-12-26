@@ -8,10 +8,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Dependencies
+        run: sudo apt-get install -y tar shellcheck
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Shellcheck
-        run: sudo apt-get install -y shellcheck && make shellcheck
       - name: Build
         run: make PBG_VERSION=${{ github.ref_name }}
       - name: Release
