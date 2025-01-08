@@ -6,4 +6,8 @@
 # Usage: ./enable_tcp_debugging.sh <PORT>
 ################################################################################
 
+# TODO: verify port argument
+
 setprop service.adb.tcp.port "$1"
+
+# TODO: stop & restart adb service
