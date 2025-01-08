@@ -2,7 +2,7 @@
 
 ################################################################################
 # Description: find the path of the block device with the specified UUID
-# Author: Vivek Revankar <vivek@master-hax.com>
+# Contributors: Vivek Revankar <vivek@master-hax.com>
 # Usage: ./find_device.sh <UUID_FILE_PATH>
 ################################################################################
 

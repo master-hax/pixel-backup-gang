@@ -2,7 +2,7 @@
 
 ################################################################################
 # Description: start a shell in the global mount namespace
-# Author: Vivek Revankar <vivek@master-hax.com>
+# Contributors: Vivek Revankar <vivek@master-hax.com>
 # Usage: ./start_global_shell.sh
 ################################################################################
 

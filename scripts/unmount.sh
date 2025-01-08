@@ -2,7 +2,7 @@
 
 ################################################################################
 # Description: unmounts the block device previously mounted by mount_ext4.sh
-# Author: Vivek Revankar <vivek@master-hax.com>
+# Contributors: Vivek Revankar <vivek@master-hax.com>
 # Usage: ./unmount.sh
 ################################################################################
 

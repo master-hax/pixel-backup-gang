@@ -2,7 +2,7 @@
 
 ################################################################################
 # Description: remounts /the_binding in the specified mounted vfat folder to the internal storage
-# Author: Vivek Revankar <vivek@master-hax.com>
+# Contributors: Vivek Revankar <vivek@master-hax.com>
 # Usage: ./remount_vfat.sh <DIRECTORY_PATH>
 # Example: ./remount_vfat.sh /mnt/media_rw/2IDK-11F4
 ################################################################################
