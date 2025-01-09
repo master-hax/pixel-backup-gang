@@ -21,7 +21,7 @@ else
   internal_binding_dir="/mnt/runtime/write/emulated/0/the_binding"
 fi
 
-[[ $(mount | grep -w "$internal_binding_dir") != "" ]]&& \
+[[ $(mount | grep -w "$internal_binding_dir") != "" ]] && \
   umount -v $internal_binding_dir
 
 # check if mount exists for EXT4 drives
