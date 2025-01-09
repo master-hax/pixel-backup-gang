@@ -28,18 +28,38 @@ if [ ! -d "$mounted_drive_path" ]; then
 fi
 
 fs_type=$(stat -f -c %T "$mounted_drive_path")
-if [ "$fs_type" != "msdos" ]; then
-    echo "detected filesystem type was not 'msdos', found $fs_type"
+if [ "$fs_type" != "msdos" && "$fs_type" != "vfat"]; then
+    echo "detected filesystem type was not 'msdos' or 'vfat', found $fs_type"
     exit 1
 fi
 
+android_version=$(getprop ro.build.version.release)
+
 drive_binding_dir="$mounted_drive_path/the_binding"
-internal_binding_dir="/mnt/runtime/write/emulated/0/the_binding"
+if [ $android_version -gt 10 ]; then
+  # for Android 11+
+  internal_binding_dir="/mnt/pass_through/0/emulated/0/the_binding"
+else
+  # for Android 10 and below
+  internal_binding_dir="/mnt/runtime/write/emulated/0/the_binding"
+fi
+# create mount points and binding directory
 mkdir -p -v "$drive_binding_dir"
 mkdir -p -v "$internal_binding_dir"
+
+if [ $android_version -gt 10 ]; then
 mount \
--t sdcardfs \
--o nosuid,nodev,noexec,noatime,gid=9997 \
-"$drive_binding_dir" "$internal_binding_dir"
+  "$drive_binding_dir" "$internal_binding_dir"
+else
+mount \
+  -t sdcardfs \
+  -o nosuid,nodev,noexec,noatime,gid=9997 \
+  "$drive_binding_dir" "$internal_binding_dir"
+fi
+
+# broadcast the mounted directory to media scanner
+am broadcast \
+  -a android.intent.action.MEDIA_SCANNER_SCAN_FILE \
+  -d file:///storage/emulated/0/the_binding/
 
 echo "vfat drive remounted succesfully"
