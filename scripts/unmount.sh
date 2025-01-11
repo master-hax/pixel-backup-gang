@@ -11,5 +11,6 @@ if [ "$(readlink /proc/self/ns/mnt)" != "$(readlink /proc/1/ns/mnt)" ]; then
   exit 1
 fi
 
+umount -v /mnt/pass_through/0/emulated/0/the_binding
 umount -v /mnt/runtime/write/emulated/0/the_binding
 umount -v /mnt/my_drive
