@@ -28,7 +28,7 @@ if [ ! -d "$mounted_drive_path" ]; then
 fi
 
 fs_type=$(stat -f -c %T "$mounted_drive_path")
-if [ "$fs_type" != "msdos" && "$fs_type" != "vfat"]; then
+if [ "$fs_type" != "msdos" ] && [ "$fs_type" != "vfat" ]; then
     echo "detected filesystem type was not 'msdos' or 'vfat', found $fs_type"
     exit 1
 fi
@@ -36,7 +36,7 @@ fi
 android_version=$(getprop ro.build.version.release)
 
 drive_binding_dir="$mounted_drive_path/the_binding"
-if [ $android_version -gt 10 ]; then
+if [ "$android_version" -gt 10 ]; then
   # for Android 11+
   internal_binding_dir="/mnt/pass_through/0/emulated/0/the_binding"
 else
@@ -47,7 +47,7 @@ fi
 mkdir -p -v "$drive_binding_dir"
 mkdir -p -v "$internal_binding_dir"
 
-if [ $android_version -gt 10 ]; then
+if [ "$android_version" -gt 10 ]; then
 mount \
   "$drive_binding_dir" "$internal_binding_dir"
 else
