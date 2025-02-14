@@ -20,7 +20,7 @@ fi
     
 
 if [ "$adb_port" -le 0 ] || [ "$adb_port" -ge 65536 ]; then
-  echo "port must be between 0 & 65535 (inclusive)"
+  echo "port must be > 0 and < 65536"
   exit 1
 fi
 
