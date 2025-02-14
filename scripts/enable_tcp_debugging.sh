@@ -6,8 +6,6 @@
 # Usage: ./enable_tcp_debugging.sh <PORT>
 ################################################################################
 
-# TODO: verify port argument
-
 if [ "$#" -ne 1 ]; then
   echo "Usage: $0 <PORT_NUMBER>" >&2
   exit 1
