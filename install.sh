@@ -6,7 +6,7 @@
 # Usage: sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"
 ################################################################################
 
-pbg_tarball_version="0.0.6"
+: "${pbg_tarball_version:=0.0.6}"
 pbg_tarball_filename="pixel-backup-gang-$pbg_tarball_version.tar.gz"
 pbg_tarball_url="https://github.com/master-hax/pixel-backup-gang/releases/download/$pbg_tarball_version/$pbg_tarball_filename"
 echo "install.sh: downloading version $pbg_tarball_version from github"
