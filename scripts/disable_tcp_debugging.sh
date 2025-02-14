@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 ################################################################################
 # Description: disable adb access over tcp
@@ -6,6 +6,4 @@
 # Usage: ./disable_tcp_debugging.sh
 ################################################################################
 
-setprop service.adb.tcp.port ""
-
-# TODO: stop adb service
+setprop service.adb.tcp.port "" && stop adbd && echo "adbd service stopped & no longer listening"
