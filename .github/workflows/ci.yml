@@ -11,11 +11,11 @@ jobs:
       - name: Dependencies
         run: sudo apt-get install -y tar shellcheck
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # https://github.com/actions/checkout/tree/v4.2.2
       - name: Build
         run: make PBG_VERSION=${{ github.ref_name }}
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@c95fe1489396fe8a9eb87c0abf8aa5b2ef267fda # https://github.com/softprops/action-gh-release/tree/v2.2.1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           prerelease: false
