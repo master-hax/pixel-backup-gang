@@ -68,7 +68,7 @@ this is the preferred installation method for development as it doesn't require 
     * from a PC
       * run `adb shell`
       * run `su` then allow sudo access to the shell process in Magisk
-1. run `cd` to navigate to the installation directory e.g. `cd ./pixel-backup gang` or `cd /data/data/com.termux/files/home/pixel-backup gang` or `cd /data/local/tmp/pixel-backup-gang`
+1. run `cd` to navigate to the installation directory e.g. `cd ./pixel-backup gang` or `cd /data/data/com.termux/files/home/pixel-backup-gang` or `cd /data/local/tmp/pixel-backup-gang`
 1. run `./start_global_shell.sh` to enter the global mount namespace
     * the Magisk "force the global mount namespace" doesn't work - maybe it only works for magisk modules?
 
