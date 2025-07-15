@@ -5,7 +5,7 @@ mount ext4 drives & remount VFAT/FAT32 drives into the google pixel's internal s
 
 **WARNING: this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.**
 
-anyway here is a demo image of an SSD mounted into the internal storage on my Pixel XL. the data is readable & writable in the Google Photos app.
+anyway here is a demo image of an SSD mounted into the "internal storage" on my Pixel XL. the data is readable & writable in the Google Photos app.
 ![image](assets/demo.jpg)
 
 
