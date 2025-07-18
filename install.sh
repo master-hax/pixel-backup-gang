@@ -1,7 +1,7 @@
 #!/bin/sh -eu
 
 ################################################################################
-# Description: install the latest version of pixel-backup to the local directory
+# Description: install the latest version of pixel-backup-gang to the local directory
 # Author: Vivek Revankar <vivek@master-hax.com>
 # Usage: sh -c "$(curl -fSs https://raw.githubusercontent.com/master-hax/pixel-backup-gang/master/install.sh)"
 ################################################################################
