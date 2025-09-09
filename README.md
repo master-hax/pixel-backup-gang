@@ -19,18 +19,18 @@ this method is basically a hack around the selinux policies + app permissions us
 
 (if you don't care about using these scripts and just want to see how it's done, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
 
-## the good
+### the good
 * works with the stock kernel
 * backs up external files larger than 4gb (stock OS only supports FAT32 for external drives)
 * reduces wear on internal flash storage by up to 50% (see https://github.com/master-hax/pixel-backup-gang/issues/30)
 * prevents device from overheating - the external drive gets hot instead
 * makes 32gb pixels viable for mass backup
 
-## the bad
+### the bad
 * phone needs to be rooted
 * there's currently no way to auto-mount when the disk is connected
 
-## the ugly
+### the ugly
 * there's no GUI, you need to execute shell scripts
 
 ## prerequisites
