@@ -47,7 +47,7 @@ so i spent some time figuring out a way to get files on external storage drives 
 * there's no GUI, you need to execute shell scripts
 
 ## prerequisites
-* a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with [Magisk](https://github.com/topjohnwu/Magisk). may work on other phones.
+* a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with [Magisk](https://github.com/topjohnwu/Magisk). may work on other phones with other versions of android (see https://github.com/master-hax/pixel-backup-gang/pull/33).
 * a USB storage drive formatted with an ext4 or FAT32 filesystem.
 
 ## installation
