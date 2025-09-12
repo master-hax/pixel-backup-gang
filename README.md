@@ -22,11 +22,9 @@ So everybody painstakingly copies their media into to their pixel's internal sto
 
 Android is kinda just linux so my first thought was [NFS](https://en.wikipedia.org/wiki/Network_File_System). Sadly, the Pixel's kernel wasn't compiled with it (`cat /proc/filesystems`). We can actually add NFS support at runtime using a [linux kernel module](https://wiki.archlinux.org/title/Kernel_module) - however i believe such a module needs to be signed by Google on the stock OS due to [Android Verified Boot](https://source.android.com/docs/security/features/verifiedboot/avb). 
 
-but they can't serve files to Google Photos without using
-
 i then looked into using FUSE (filesystem in user space) based solutions. There are userspace nfs clients like [nfs-ganesha](https://github.com/nfs-ganesha/nfs-ganesha) & local filesystem mounting solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android 10's selinux policies. however i found FUSE's performance on the pixel to be incredibly slow. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
 
-this method is basically a set of hacks around the selinux policies + app sandbox using the plain old kernel supported `mount` command to make an external storage drive magically show up in the internal storage.
+this method is basically a set of hacks around the selinux policies + app sandbox (using the plain old kernel supported `mount` command) to make files on an external storage device look as if they are stored in the device's internal storage.
 
 (if you don't care about using these scripts and just want to see how it's done, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
 
