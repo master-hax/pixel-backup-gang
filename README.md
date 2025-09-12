@@ -82,8 +82,8 @@ this is the preferred installation method for development as it doesn't require 
 1. connect the ext4 formatted external drive to the pixel. you should get an os notification that says the drive is not supported. clear or ignore this notification.
    * this notification directs you to format the drive in FAT32 - don't do that
 1. find the block device that you want to mount. it is usually found at `/dev/block/sdg1` but changes when devices are connected and disconnected.
-   * if you don't know the filesystem UUID, use `./show_devices.sh`
-   * if you know the filesystem UUID, use `./find_device.sh`
+   * if you don't know the filesystem UUID, you can use `./show_devices.sh`. this is just a convenience script, you don't need to run this.
+   * if you know the filesystem UUID, you can use `./find_device.sh`. this is just a convenience script, you don't need to run this.
 1. run `./mount_ext4.sh <BLOCK_DEVICE>` e.g. `./mount_ext4.sh /dev/block/sdg1`
 
 #### FAT32 drives
