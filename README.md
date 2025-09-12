@@ -22,7 +22,7 @@ so everybody painstakingly copies their media into to their pixel's internal sto
 
 android is kinda just linux, right? so my first thought was to use [NFS](https://en.wikipedia.org/wiki/Network_File_System) to mount a remote filesystem. puny apps won't be able to tell the difference.
 
-![bilbo](https://github.com/user-attachments/assets/af4f6bef-0262-4473-be54-d6fe7a479966)
+![bilbo](./assets/bilbo.jpg)
 > after all, why not? why shouldn't i mount a multi terabyte NAS straight into the DCIM folder on a 32 GB pixel?
 
 alas, the Pixel's kernel wasn't compiled with NFS support (`cat /proc/filesystems`). We can actually add NFS support at runtime using a [linux kernel module](https://wiki.archlinux.org/title/Kernel_module) - however i believe such a module needs to be signed by Google on the stock OS due to [Android Verified Boot](https://source.android.com/docs/security/features/verifiedboot/avb). i then looked into using FUSE (filesystem in user space) based solutions. There are userspace nfs clients like [nfs-ganesha](https://github.com/nfs-ganesha/nfs-ganesha) & local filesystem mounting solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android 10's selinux policies. however i found FUSE's performance on the pixel to be incredibly slow. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
