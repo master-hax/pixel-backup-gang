@@ -29,7 +29,7 @@ alas, the Pixel's kernel wasn't compiled with NFS support (`cat /proc/filesystem
 
 so i spent some time figuring out a way to get files on external storage drives to show up to apps as if they are stored in the internal storage. this method is basically a set of hacks around the selinux policies + app sandbox (using the plain old kernel supported `mount` command) to make files on an external storage device look as if they are stored in the device's internal storage.
 
-(if you don't care about using these scripts and just want to see how it's done, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
+(if you don't care about using this automation and just want to see how it's done to do it yourself, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
 
 ### the good
 * works with the stock kernel
