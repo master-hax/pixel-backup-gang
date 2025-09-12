@@ -86,7 +86,7 @@ this is the preferred installation method for development as it doesn't require 
    * if you know the filesystem UUID, you can use `./find_device.sh`. this is just a convenience script, you don't need to run this.
 1. run `./mount_ext4.sh <BLOCK_DEVICE>` e.g. `./mount_ext4.sh /dev/block/sdg1`
 > [!CAUTION]
-> the `mount_ext4.sh` script disables [selinux](https://en.wikipedia.org/wiki/Security-Enhanced_Linux) by running `setenforce 0`. you must not have any untrusted apps installed on your device. do not visit untrusted websites. to re-enable selinux, you can reboot your device, or run `setenforce 1` with root permissions.
+> the `mount_ext4.sh` script disables [selinux](https://en.wikipedia.org/wiki/Security-Enhanced_Linux) by running `setenforce 0`. you must not have any untrusted apps installed on your device. do not visit untrusted websites. to re-enable selinux, you can reboot your device, or run `setenforce 1` with root permissions. see https://github.com/master-hax/pixel-backup-gang/issues/13 for more info.
 
 #### FAT32 drives (when you only have files < 4gb and/or don't want to disable selinux and/or are a Windows only user unwilling to install a tool like [Ext4Fsd](https://github.com/bobranten/Ext4Fsd.git) and/or are transferring directly from some kind of capture device)
 1. connect the FAT32 formatted external drive to the pixel. it should be working normally as removable storage i.e. readable & writable by apps with permission.
