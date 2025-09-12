@@ -12,7 +12,7 @@ anyway here is a demo image of an SSD mounted into the "internal storage" on my 
 ## why? 🤔
 from [google support](https://web.archive.org/web/20250725010242/https://support.google.com/photos/answer/6220791?co=GENIE.Platform%3DAndroid&oco=1#zippy=%2Cpixel-st-generation):
 >
-> > 📱 **Pixel (1st generation)**  
+> > **Pixel (1st generation)**  
 > >> You get unlimited storage in Original quality at no charge. You won’t be able to back up in Storage saver.
 
 everyone needs storage. and everyone likes no charge. this sounds great! but of course there's a catch. all media must be backed up through the Google Photos app, which pretends it can only see files located in the device's internal storage.
