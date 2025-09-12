@@ -9,13 +9,24 @@ anyway here is a demo image of an SSD mounted into the "internal storage" on my 
 ![image](assets/demo.jpg)
 
 
-## why?
+## why? 🤔
+from [google support](https://web.archive.org/web/20250725010242/https://support.google.com/photos/answer/6220791?co=GENIE.Platform%3DAndroid&oco=1#zippy=%2Cpixel-st-generation):
+>
+> > 📱 **Pixel (1st generation)**  
+> >> You get unlimited storage in Original quality at no charge.  
+> >> You won’t be able to back up in Storage saver.
 
-the main goal is to allow for easy backup of external media via Google Photos on original Google Pixel phones, which which have an unlimited storage benefit. the "usual" method is to copy every file to the device's internal storage, which can incur terabytes of unnecessary writes to the limited lifetime of the internal flash memory.
+everyone has media to store. and everyone likes free. this sounds great! but of course there's a catch. All media must be backed up through the Google Photos app, which only scans files from the internal storage.
 
-i first tried using FUSE (filesystem in user space) based solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android's selinux policies. however the performance was not acceptable. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
+So everybody painstakingly copies their media into to their pixel's internal storage to get it backed up. Some people use FAT32 usb drives, some people use FTP transfers, some people use [syncthing](https://github.com/syncthing/syncthing). but i was annoyed by having to tranfer photos & videos over unreliable & slow network connections, just to drastically & unnecessarily shorten the flash memory's [limited lifetime](https://en.wikipedia.org/wiki/Flash_memory#Memory_wear). So i started looking into ways to get my "unlimited storage" without destroying my pixel in the process.
 
-this method is basically a hack around the selinux policies + app permissions using the plain old `mount` command.
+Android is kinda just linux so my first thought was [NFS](https://en.wikipedia.org/wiki/Network_File_System). Sadly, the Pixel's kernel wasn't compiled with it (`cat /proc/filesystems`). We can actually add NFS support at runtime using a [linux kernel module](https://wiki.archlinux.org/title/Kernel_module) - however i believe such a module needs to be signed by Google on the stock OS due to [Android Verified Boot](https://source.android.com/docs/security/features/verifiedboot/avb). 
+
+but they can't serve files to Google Photos without using
+
+i then looked into using FUSE (filesystem in user space) based solutions. There are userspace nfs clients like [nfs-ganesha](https://github.com/nfs-ganesha/nfs-ganesha) & local filesystem mounting solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android 10's selinux policies. however i found FUSE's performance on the pixel to be incredibly slow. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
+
+this method is basically a set of hacks around the selinux policies + app sandbox using the plain old kernel supported `mount` command to make an external storage drive magically show up in the internal storage.
 
 (if you don't care about using these scripts and just want to see how it's done, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
 
