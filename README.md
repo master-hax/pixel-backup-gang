@@ -58,6 +58,10 @@ this one-liner runs a small installer script that downloads the latest release a
 
 this is the preferred installation method for development as it doesn't require an internet connection & any changes to the scripts in the local repo are immediately deployed to the pixel
 
+> [!NOTE]  
+> The directories `/data/local/tmp` & `/data/data/com.termux/files/home` are known to have less restrictive selinux policies, which allow files to be made executable. Installing the scripts to other directories may not work.
+
+
 ## usage
 
 ### setup
