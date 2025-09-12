@@ -35,7 +35,7 @@ so i spent some time figuring out a way to get files on external storage drives 
 * works with the stock kernel
 * backs up external files larger than 4gb (stock OS only supports FAT32 for external drives)
 * reduces wear on internal flash storage by up to 50% (see https://github.com/master-hax/pixel-backup-gang/issues/30)
-* prevents device from overheating - the external drive gets hot instead
+* can prevent the device from overheating - the external drive gets hot instead
 * makes 32gb pixels viable for mass backup
 
 ### the bad
