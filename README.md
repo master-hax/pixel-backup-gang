@@ -7,7 +7,9 @@
 > this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.
 
 anyway here is a demo image of an SSD mounted into the "internal storage" on my Pixel XL. the data is readable & writable in the Google Photos app.
-![image](assets/demo.jpg)
+> #### "You freed up 593 GB"
+> ![image](assets/demo.jpg)
+
 
 ## why? 🤔
 from [google support](https://web.archive.org/web/20250725010242/https://support.google.com/photos/answer/6220791?co=GENIE.Platform%3DAndroid&oco=1#zippy=%2Cpixel-st-generation):
@@ -21,9 +23,9 @@ so everybody painstakingly copies their media into to their pixel's internal sto
 
 android is kinda just linux, right? so my first thought was to use [NFS](https://en.wikipedia.org/wiki/Network_File_System) to mount a remote filesystem. puny apps won't be able to tell the difference.
 
-![bilbo](./assets/bilbo.jpg)
 
-> **after all, why not? why shouldn't i mount a multi terabyte NAS straight into the DCIM folder on a 32 GB pixel?**
+> #### "After all, why not? why shouldn't i mount a multi terabyte NAS into the DCIM folder on a 32 GB pixel?"
+> ![bilbo](./assets/bilbo.jpg)
 
 alas, the Pixel's kernel wasn't compiled with NFS support (`cat /proc/filesystems`). We can actually add NFS support at runtime using a [loadable kernel module](https://source.android.com/docs/core/architecture/kernel/loadable-kernel-modules) - however i believe such a module needs to be signed by Google on the stock OS due to [Android Verified Boot](https://source.android.com/docs/security/features/verifiedboot/avb). i then looked into using [FUSE](https://en.wikipedia.org/wiki/Filesystem_in_Userspace) based solutions. There are userspace nfs clients like [nfs-ganesha](https://github.com/nfs-ganesha/nfs-ganesha) & local filesystem mounting solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android 10's selinux policies. however i found FUSE's performance on the pixel to be incredibly slow. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
 
