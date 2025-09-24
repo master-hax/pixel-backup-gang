@@ -55,7 +55,7 @@ so i spent some time figuring out a way to get files on external storage drives 
 
 installation is essentially just copying the scripts to the device & making them executable. you can do this manually, or use one of the automated steps below. you also probably want to disable [Google Play Protect](https://developers.google.com/android/play-protect) scanning in the Play Store menu.
 
-### from internet via pixel terminal
+### from internet via pixel terminal (more convenient & doesn't require a separate computer, but a little sus)
 1. start a terminal application and navigate to the directory where you want to install the scripts
 1. run the following command:
 
@@ -63,9 +63,9 @@ installation is essentially just copying the scripts to the device & making them
 
 this one-liner runs a small installer script that downloads the latest release archive from github, unpacks it, then makes the contents executable. the current install script can be viewed [here](https://github.com/master-hax/pixel-backup-gang/blob/install/install.sh). piping strange scripts from the web into a root shell is generally not a good idea, but it is convenient. try not to make a habit of it. 😅
 
-### from local repository via adb
-1. install the following software: `adb make shellcheck tar` (requires Linux or Windows Subsystem for Linux)
-1. clone this repository
+### from local repository via adb (preferred, best for developers, works offline, more secure)
+1. install the following software: `adb make shellcheck tar` (requires a separate computer running Linux or Windows Subsystem for Linux)
+1. clone this repository (at the desired tag or commit)
 1. run `make mobile-install` from the repository root. this installs the scripts to `/data/local/tmp` on the connected android device by default.
    * if your pixel has Termux installed, you can install the scripts to the Termux home directory with `make mobile-install DEVICE_INSTALL_DIRECTORY=/data/data/com.termux/files/home`
    * if you are running these steps on WSL, you should use the adb executable from windows (which has USB support) with `make mobile-install HOST_ADB_COMMAND=/mnt/c/Users/someone/AppData/Local/Android/Sdk/platform-tools/adb.exe`
