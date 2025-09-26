@@ -1,7 +1,6 @@
 # pixel backup gang
 
-* mount ext4 drives into the OG google pixel's internal storage
-* remount VFAT/FAT32 drives into the OG google pixel's internal storage
+augment the OG pixel's internal storage with an external drive
 
 > [!WARNING]  
 > this code is experimental and there is no guarantee that it works. rooting your phone or running any commands as root can be very dangerous. you have been warned.
@@ -29,7 +28,7 @@ android is kinda just linux, right? so my first thought was to use [NFS](https:/
 
 alas, the Pixel's kernel wasn't compiled with NFS support (`cat /proc/filesystems`). We can actually add NFS support at runtime using a [loadable kernel module](https://source.android.com/docs/core/architecture/kernel/loadable-kernel-modules) - however i believe such a module needs to be signed by Google on the stock OS due to [Android Verified Boot](https://source.android.com/docs/security/features/verifiedboot/avb). i then looked into using [FUSE](https://en.wikipedia.org/wiki/Filesystem_in_Userspace) based solutions. There are userspace nfs clients like [nfs-ganesha](https://github.com/nfs-ganesha/nfs-ganesha) & local filesystem mounting solutions like [bindfs](https://github.com/mpartel/bindfs) (via [termux root-packages](https://github.com/termux/termux-packages/tree/817ccec622c510929e339285eb5400dbb5b2f4c7/root-packages/bindfs)) and [fuse-nfs](https://github.com/sahlberg/fuse-nfs.git) (complicated to compile for android so i built my own minimal version in Rust). this works and is especially good at sidestepping android 10's selinux policies. however i found FUSE's performance on the pixel to be incredibly slow. (note: i have not tried fbind but i don't think that works out of the box here without using FUSE)
 
-so i spent some time figuring out a way to get files on external storage drives to show up to apps as if they are stored in the internal storage. this method is basically a set of hacks around the selinux policies + app sandbox (using the plain old kernel supported `mount` command) to **make files on an external storage device look as if they are stored in the device's internal storage**.
+so i spent some time figuring out a way to get files on external storage drives to show up to apps as if they are stored in the internal storage. this method is basically a set of hacks around the app sandbox (+ selinux policies in case of ext4) to **add an external storage drive into the device's internal storage**.
 
 (if you don't care about using this automation and just want to see how it's done to do it yourself, take a look at [mount_ext4.sh](scripts/mount_ext4.sh))
 
