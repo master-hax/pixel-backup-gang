@@ -16,7 +16,7 @@ from [google support](https://web.archive.org/web/20250725010242/https://support
 > > **Pixel (1st generation)**  
 > >> You get unlimited storage in Original quality at no charge. You won’t be able to back up in Storage saver.
 
-everyone needs storage. and everyone likes no charge. this sounds great! but of course there's a catch. all media must be backed up through the Google Photos app, which pretends it can only see files located in the device's internal storage.
+everyone needs storage. and everyone likes no charge. this sounds great! just back up your data through the device using the Google Photos app. but there's a catch - the Google Photos app pretends it can only see files located in the device's internal storage.
 
 so everybody painstakingly copies their media into to their pixel's internal storage to get it backed up. some copy photos using FAT32 usb drives. some use FTP transfers. many use [syncthing](https://github.com/syncthing/syncthing) for automation. but i got fed up of transferring photos & videos over unreliable & slow network connections, just to drastically & unnecessarily shorten the flash memory's [limited lifetime](https://en.wikipedia.org/wiki/Flash_memory#Memory_wear). So i started looking into ways to get my unlimited storage without destroying my pixel in the process.
 
