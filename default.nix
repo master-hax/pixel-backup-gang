@@ -20,7 +20,7 @@ pkgs.stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp pixel-backup-gang-${pbgVersion}.tar.gz $out/bin/pixel-backup-gang.tar.gz
+    mkdir -p $out
+    cp pixel-backup-gang-${pbgVersion}.tar.gz $out/pixel-backup-gang.tar.gz
   '';
 }
