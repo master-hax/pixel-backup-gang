@@ -50,6 +50,16 @@ so i spent some time figuring out a way to get files on external storage drives 
 * a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with [Magisk](https://github.com/topjohnwu/Magisk). may work on other phones with other versions of android (see https://github.com/master-hax/pixel-backup-gang/pull/33).
 * a USB storage drive formatted with an ext4 or FAT32 filesystem.
 
+#### formatting a drive as ext4 (for macOS)
+first install `e2fsprogs` with `brew install e2fsprogs`
+
+then find your drive mount with `diskutil list`
+
+finally format as ext4 with this command (change the name and target disk)
+```
+sudo $(brew --prefix e2fsprogs)/sbin/mkfs.ext4 -L "NAME_OF_DRIVE" -O ^metadata_csum,^64bit /dev/TARGET_DISK
+```
+
 ## installation
 
 installation is essentially just copying the scripts to the device & making them executable. you can do this manually, or use one of the automated steps below. you also probably want to disable [Google Play Protect](https://developers.google.com/android/play-protect) scanning in the Play Store menu.
