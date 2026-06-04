@@ -13,6 +13,8 @@ Steps to use
 
 
 NOTES:
-  * Only tested with FAT32 usb thusfar
-  * still need to initiate media scan intent
+  * Pixel Works with FAT32 usb.  does not work with exFAT
+  * script DOES initiate a scan intent after mounting
+
+TODO:
   * still need to try to do something to avoid temp storage in photos app beating on flash
