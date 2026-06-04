@@ -1,0 +1,6 @@
+id=usb-mounter
+name=usb-mounter
+version=v1
+versionCode=1
+author=Chris
+description=Cross Mount USB external storage into internal Camera storage
