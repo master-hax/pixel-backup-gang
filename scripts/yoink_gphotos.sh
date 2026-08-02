@@ -23,7 +23,7 @@ if ! mount | grep -q " $drive_mount_dir "; then
   exit 1
 fi
 
-if [ -e "$relocated_dir" ] && [ "$data_dir" -ef "$relocated_dir" ]; then
+if [ -e "$relocated_dir" ] && [ "$(stat -c '%d:%i' "$data_dir")" = "$(stat -c '%d:%i' "$relocated_dir")" ]; then
   echo "$data_dir is already bind mounted from $relocated_dir - nothing to do"
   exit 1
 fi
