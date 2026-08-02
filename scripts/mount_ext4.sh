@@ -37,9 +37,8 @@ mkdir -p -v "$drive_mount_dir"/the_binding
 chmod -R 777 "$drive_mount_dir"/the_binding
 chown -R sdcard_rw:sdcard_rw "$drive_mount_dir"
 
-# may be possible to avoid this by mounting to /mnt/expand/<uuid>
-# TODO: use magiskpolicy https://github.com/topjohnwu/Magisk/blob/master/docs/tools.md#magiskpolicy
-setenforce 0
+# relabel files on the drive as media_rw_data_file so apps can access it under enforcing selinux
+chcon -R u:object_r:media_rw_data_file:s0 "$drive_mount_dir"
 
 mkdir -p -v "$internal_binding_dir"
 mount \
