@@ -21,3 +21,16 @@ jobs:
           prerelease: false
           files: "pixel-backup-gang-*.tar.gz"
           token: ${{ secrets.MY_GITHUB_TOKEN }}
+
+  build-boot-image:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # https://github.com/actions/checkout/tree/v4.2.2
+      - name: Install Nix
+        uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342 # https://github.com/cachix/install-nix-action/tree/v31
+      - name: Build rooted, NFS-enabled boot.img
+        run: nix-build -A specialNfsBootImg default.nix
+      - name: Verify boot.img exists
+        run: test -f result/boot.img
