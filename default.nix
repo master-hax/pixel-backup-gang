@@ -446,7 +446,7 @@ let
 
       # same source/config as stockKernel, but with NFS client support enabled
       specialNfsKernel = mkPixelKernel {
-        deviceCodename = "marlin-with-nfs-${buildId}";
+        deviceCodename = "marlin-${buildId}-special-nfs";
         inherit kernelSrc;
         defconfigFile = ./kernel/marlin_72a7a64494e_defconfig;
         extraConfig = [
@@ -554,7 +554,7 @@ let
         };
 
         specialNfs = mkMagiskPatchedBootImg {
-          name = "marlin-with-nfs-${buildId}-magisk${magiskLatestVersion}-bootimg";
+          name = "marlin-${buildId}-special-nfs-magisk${magiskLatestVersion}-bootimg";
           bootImg = "${specialNfsBootImg}/boot.img";
           magiskApk = magiskRegistry.${magiskLatestVersion};
           magiskVersion = magiskLatestVersion;
@@ -575,5 +575,5 @@ in
   # the rooted, NFS-enabled boot.img actually flashed to a real device -
   # exposed directly at the top level (not just via marlinBuilds.*) so plain
   # `nix-build default.nix` always produces this specific output
-  specialNfsBootImg = marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs;
+  rootedSpecialNfsBootImg = marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs;
 }

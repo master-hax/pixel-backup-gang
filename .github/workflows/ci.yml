@@ -33,7 +33,19 @@ jobs:
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes
-      - name: Build rooted, NFS-enabled boot.img
-        run: nix build --print-build-logs --no-update-lock-file .#specialNfsBootImg
+      - name: Build rooted & NFS-enabled boot.img
+        run: nix build --print-build-logs --no-update-lock-file .#rootedSpecialNfsBootImg
       - name: Verify boot.img exists
         run: test -f result/boot.img
+      - name: Rename boot.img and compute its checksum
+        run: |
+          name=$(nix eval --raw .#rootedSpecialNfsBootImg.name)
+          cp result/boot.img "$name.img"
+          sha256sum "$name.img" > "$name.img.sha256"
+      - name: Upload boot.img
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # https://github.com/actions/upload-artifact/tree/v7.0.1
+        with:
+          name: rootedSpecialNfsBootImg
+          path: |
+            *.img
+            *.img.sha256
