@@ -487,7 +487,7 @@ let
       inherit kernelSrc factoryImage;
 
       # kernel builds, keyed the same way as bootImages/magiskBootImages below
-      kernel = {
+      kernels = {
         factory = factoryKernel;
         stock = stockKernel;
         specialNfs = specialNfsKernel;
