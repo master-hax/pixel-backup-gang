@@ -318,7 +318,7 @@ let
     };
   };
 
-  # the version marlinBuilds.*.magiskBootImages is pinned to - bump this (and
+  # the version marlin.*.magiskBootImages is pinned to - bump this (and
   # add a new magiskRegistry entry) to move everyone forward at once
   #
   # NOT 30.7: known bug produces an oversized boot.img ("size too large" from
@@ -494,7 +494,7 @@ let
       };
 
       # sanity checks, not build outputs - build one to verify, e.g.
-      # `nix-build -A marlinBuilds."<id>".checks.factoryKernelRoundtrip`
+      # `nix-build -A marlin."<id>".checks.factoryKernelRoundtrip`
       checks = {
         # extract + repack the factory kernel and diff it against the
         # original, proving mkPixelExtractedKernel/mkPixelRepackBootImg
@@ -564,11 +564,11 @@ let
       };
     };
 
-  marlinBuilds = pkgs.lib.mapAttrs mkMarlinBuild marlinBuildRegistry;
+  marlin = pkgs.lib.mapAttrs mkMarlinBuild marlinBuildRegistry;
 
 in
 
 {
-  inherit mountingScripts marlinBuilds magiskRegistry;
+  inherit mountingScripts marlin magiskRegistry;
   inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkMarlinBuild mkMagiskPatchedBootImg;
 }

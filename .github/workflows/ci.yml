@@ -26,7 +26,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build_id: ["QP1A.191005.007.A3", "QP1A.191005.007.A1"]
+        include:
+          - codename: marlin
+            build_id: "QP1A.191005.007.A3"
+          - codename: marlin
+            build_id: "QP1A.191005.007.A1"
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # https://github.com/actions/checkout/tree/v4.2.2
@@ -36,19 +40,19 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - name: Build rooted & NFS-enabled boot.img
-        run: nix build --print-build-logs --no-update-lock-file ".#marlinBuilds.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs"
+        run: nix build --print-build-logs --no-update-lock-file ".#${{ matrix.codename }}.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs"
       - name: Verify boot.img exists
         run: test -f result/boot.img
       - name: Rename boot.img and compute its checksum
         run: |
-          name=$(nix eval --raw ".#marlinBuilds.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs.name")
+          name=$(nix eval --raw ".#${{ matrix.codename }}.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs.name")
           cp result/boot.img "$name.img"
           sha256sum "$name.img" > "$name.img.sha256"
       - name: Upload boot.img as workflow artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # https://github.com/actions/upload-artifact/tree/v7.0.1
         if: "!startsWith(github.ref, 'refs/tags/')"
         with:
-          name: rootedSpecialNfsBootImg-${{ matrix.build_id }}
+          name: rootedSpecialNfsBootImg-${{ matrix.codename }}-${{ matrix.build_id }}
           path: |
             *.img
             *.img.sha256

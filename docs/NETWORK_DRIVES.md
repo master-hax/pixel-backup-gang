@@ -52,10 +52,10 @@ builds are currently supported for marlin versions `QP1A.191005.007.A3` and `QP1
 
 ### building it yourself with nix
 1. check your device's build number (Settings → About phone → Build number)
-1. build it, substituting your device codename (`marlinBuilds`, currently the
-   only one supported) and build number for `<BUILD_ID>`:
-   `nix build 'github:master-hax/pixel-backup-gang#marlinBuilds."<BUILD_ID>".magiskBootImages.specialNfs'`
-   * e.g. `nix build 'github:master-hax/pixel-backup-gang#marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs'`
+1. build it, substituting your device codename (`marlin`, currently the only
+   one supported) and build number for `<BUILD_ID>`:
+   `nix build 'github:master-hax/pixel-backup-gang#marlin."<BUILD_ID>".magiskBootImages.specialNfs'`
+   * e.g. `nix build 'github:master-hax/pixel-backup-gang#marlin."QP1A.191005.007.A3".magiskBootImages.specialNfs'`
    * this produces `result/boot.img`
 
 ### downloading a prebuilt boot.img from github
