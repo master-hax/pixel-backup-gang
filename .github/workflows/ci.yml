@@ -34,12 +34,12 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes
       - name: Build rooted & NFS-enabled boot.img
-        run: nix build --print-build-logs --no-update-lock-file .#rootedSpecialNfsBootImg
+        run: nix build --print-build-logs --no-update-lock-file '.#marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs'
       - name: Verify boot.img exists
         run: test -f result/boot.img
       - name: Rename boot.img and compute its checksum
         run: |
-          name=$(nix eval --raw .#rootedSpecialNfsBootImg.name)
+          name=$(nix eval --raw '.#marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs.name')
           cp result/boot.img "$name.img"
           sha256sum "$name.img" > "$name.img.sha256"
       - name: Upload boot.img

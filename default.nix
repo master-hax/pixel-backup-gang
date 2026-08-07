@@ -571,9 +571,4 @@ in
 {
   inherit mountingScripts marlinBuilds magiskRegistry;
   inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkMarlinBuild mkMagiskPatchedBootImg;
-
-  # the rooted, NFS-enabled boot.img actually flashed to a real device -
-  # exposed directly at the top level (not just via marlinBuilds.*) so plain
-  # `nix-build default.nix` always produces this specific output
-  rootedSpecialNfsBootImg = marlinBuilds."QP1A.191005.007.A3".magiskBootImages.specialNfs;
 }
