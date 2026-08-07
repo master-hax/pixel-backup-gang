@@ -1,4 +1,6 @@
-# mounting
+# mounting external drives (ext4/FAT32)
+
+for mounting a network (NFS) share instead, see [NETWORK_DRIVES.md](NETWORK_DRIVES.md).
 
 ## prerequisites
 * a Google Pixel (sailfish) or Google Pixel XL (marlin) on Android 10, rooted with [Magisk](https://github.com/topjohnwu/Magisk). may work on other phones with other versions of android (see https://github.com/master-hax/pixel-backup-gang/pull/33).

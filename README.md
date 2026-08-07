@@ -36,4 +36,6 @@ this project is basically a set of hacks for the operating system to **add an ex
 * a basic understanding of how to use a unix-like command-line interface
 
 ## getting started
-see [docs/MOUNTING.md](docs/MOUNTING.md) for prerequisites, installation, and mounting/unmounting instructions.
+see [docs/EXTERNAL_DRIVES.md](docs/EXTERNAL_DRIVES.md) for prerequisites, installation, and mounting/unmounting instructions for a USB drive (ext4 or FAT32).
+
+for mounting a network (NFS) share instead, see [docs/NETWORK_DRIVES.md](docs/NETWORK_DRIVES.md).
