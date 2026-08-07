@@ -484,7 +484,7 @@ let
       };
     in
     {
-      inherit kernelSrc factoryImage factoryBootImg;
+      inherit kernelSrc factoryImage;
 
       # kernel builds, keyed the same way as bootImages/magiskBootImages below
       kernel = {
