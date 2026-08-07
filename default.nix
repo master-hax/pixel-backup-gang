@@ -195,10 +195,9 @@ let
     };
 
   # repacks an existing boot.img (stock or Magisk-patched) with a built kernel
-  mkPixelRepackBootImg = { kernelPkg, bootImg }:
+  mkPixelRepackBootImg = { kernelPkg, bootImg, name ? "${kernelPkg.pname}-bootimg" }:
     pkgs.stdenv.mkDerivation {
-      pname = "${kernelPkg.pname}-bootimg";
-      version = kernelPkg.version;
+      inherit name;
 
       dontUnpack = true;
       nativeBuildInputs = [ pkgs.android-tools ];
@@ -330,8 +329,7 @@ let
   # so no bionic/Android sysroot needed, just arm64 instruction emulation)
   mkMagiskPatchedBootImg = { bootImg, magiskApk, magiskVersion, name ? "magisk-patched-bootimg", preinitDevice, legacySAR ? false }:
     pkgs.stdenv.mkDerivation {
-      pname = name;
-      version = magiskVersion;
+      inherit name;
 
       dontUnpack = true;
       nativeBuildInputs = [ pkgs.unzip pkgs.qemu pkgs.bash ];
@@ -459,11 +457,13 @@ let
         ];
       };
       stockBootImg = mkPixelRepackBootImg {
+        name = "marlin-${buildId}-stock-unrooted-bootimg";
         kernelPkg = stockKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
 
       specialNfsBootImg = mkPixelRepackBootImg {
+        name = "marlin-${buildId}-special-nfs-unrooted-bootimg";
         kernelPkg = specialNfsKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
@@ -479,6 +479,7 @@ let
       # should reproduce factoryBootImg exactly - see the
       # factoryKernelRoundtrip check below, which asserts this
       factoryBootImgRoundtrip = mkPixelRepackBootImg {
+        name = "marlin-${buildId}-factory-roundtrip-bootimg";
         kernelPkg = factoryKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };

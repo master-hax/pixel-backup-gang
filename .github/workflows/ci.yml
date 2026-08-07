@@ -45,7 +45,7 @@ jobs:
         run: test -f result/boot.img
       - name: Rename boot.img and compute its checksum
         run: |
-          name=$(nix eval --raw ".#${{ matrix.codename }}.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs.name")
+          name=$(nix eval --raw ".#${{ matrix.codename }}.\"${{ matrix.build_id }}\".magiskBootImages.specialNfs.name")-${{ github.ref_name }}
           cp result/boot.img "$name.img"
           sha256sum "$name.img" > "$name.img.sha256"
       - name: Upload boot.img as workflow artifact
