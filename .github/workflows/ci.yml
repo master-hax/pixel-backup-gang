@@ -5,7 +5,7 @@ on:
   push:
 
 jobs:
-  build:
+  build-mounting-scripts:
     runs-on: ubuntu-latest
     steps:
       - name: Dependencies
@@ -22,9 +22,8 @@ jobs:
           files: "pixel-backup-gang-*.tar.gz"
           token: ${{ secrets.MY_GITHUB_TOKEN }}
 
-  build-boot-image:
+  build-boot-images:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
     strategy:
       matrix:
         build_id: ["QP1A.191005.007.A3", "QP1A.191005.007.A1"]
@@ -47,7 +46,7 @@ jobs:
           sha256sum "$name.img" > "$name.img.sha256"
       - name: Upload boot.img as workflow artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # https://github.com/actions/upload-artifact/tree/v7.0.1
-        if: github.event_name == 'workflow_dispatch'
+        if: "!startsWith(github.ref, 'refs/tags/')"
         with:
           name: rootedSpecialNfsBootImg-${{ matrix.build_id }}
           path: |
