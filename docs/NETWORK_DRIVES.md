@@ -73,8 +73,7 @@ tools, then connect to your pixel over USB or wifi/ethernet.
 1. reboot: `fastboot reboot`
 
 once it reboots, you should notice two things:
-1. an error pops up immediately on the screen saying there's a problem with
-   your device, please contact your manufacturer
+1. an error pops up immediately on the screen saying "There's an internal problem with your device. Contact your manufacturer for details."
 1. after a few seconds, if you did not already have the full Magisk app
    installed, the Magisk stub app should pop up in the app drawer and prompt
    you to install the full app - go ahead and do that
@@ -94,6 +93,38 @@ TODO
 
 **everything located under `/the_binding` on the NFS export should now be
 visible by apps at `/the_binding` in the internal storage**
+
+## automounting on boot
+
+instead of running `mount_nfs.sh` manually after every reboot, install a
+Magisk module that does it automatically as root, on every boot, via
+`magiskd` - once installed, no root shell or manual mounting is ever needed
+again.
+
+1. clone this repository, then build it, substituting your server & export
+   path:
+   ```
+   nix-build -E '
+     let d = import ./default.nix {};
+     in d.mkNfsAutoMountMagiskModule {
+       nfsServer = "192.168.1.5";
+       nfsExportPath = "/volume1/my_share";
+     }
+   '
+   ```
+   this produces `result/module.zip`
+1. install it:
+   ```
+   adb wait-for-device && adb push result/module.zip /data/local/tmp/module.zip && adb shell su -c 'magisk --install-module /data/local/tmp/module.zip' && adb reboot
+   ```
+
+after installing, the module's `service.sh` runs at every boot: it waits for
+`sys.boot_completed`, then waits for the NFS server to actually answer a
+`ping` (Wi-Fi isn't necessarily up yet that early), then runs `mount_nfs.sh`.
+
+**troubleshooting:** every log line is tagged `pbg:`, so `adb shell su -c 'dmesg | grep pbg'` shows exactly what happened (or didn't) on the last boot.
+
+**uninstalling:** `adb wait-for-device && adb shell su -c 'magisk --remove-modules -n'`
 
 ## unmounting
 

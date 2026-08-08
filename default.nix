@@ -241,6 +241,94 @@ let
       '';
     };
 
+  # a Magisk module to automount NFS shares on boot
+  mkNfsAutoMountMagiskModule = { nfsServer, nfsExportPath, moduleId ? "pixel_backup_gang_nfs_automount" }:
+    pkgs.stdenv.mkDerivation {
+      name = "${moduleId}-magisk-module";
+
+      dontUnpack = true;
+      nativeBuildInputs = [ pkgs.zip ];
+
+      buildPhase = ''
+        mkdir -p module
+
+        cat > module/module.prop <<EOF
+id=${moduleId}
+name=pixel-backup-gang NFS automount
+version=v1
+versionCode=1
+author=master-hax
+description=Mounts ${nfsServer}:${nfsExportPath} into internal storage at boot
+EOF
+
+        # same script used interactively, one canonical copy - also usable
+        # manually: `su -c "/data/adb/modules/${moduleId}/mount_nfs.sh SERVER PATH"`
+        cp ${./scripts/mount_nfs.sh} module/mount_nfs.sh
+        chmod 0755 module/mount_nfs.sh
+
+        # what magiskd runs at boot - waits for boot_completed and for the
+        # server to answer a ping (Wi-Fi may not be up yet), then calls
+        # mount_nfs.sh via `sh` (its executable bit may not survive install)
+        cat > module/service.sh <<'EOF'
+#!/system/bin/sh
+exec >>/dev/kmsg 2>&1
+log() { echo "pbg: service.sh: $*"; }
+log "info: invoked at boot, mounting ${nfsServer}:${nfsExportPath}"
+
+attempt=0
+max_attempts=60
+until [ "$(getprop sys.boot_completed)" = "1" ]; do
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    log "error: sys.boot_completed never became 1 after $attempt attempts, giving up"
+    exit 1
+  fi
+  sleep 1
+done
+
+attempt=0
+max_attempts=60
+until ping -c 1 -W 1 ${nfsServer} >/dev/null 2>&1; do
+  ping_status=$?
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    log "error: ${nfsServer} unreachable after $attempt attempts (last ping exit $ping_status), giving up"
+    exit 1
+  fi
+  sleep 1
+done
+
+# credential-encrypted per-user storage isn't necessarily ready this early -
+# sys.boot_completed=1 doesn't guarantee the user has unlocked the device
+# yet, which is what actually brings this up. wait for the real mountpoint
+# to already exist rather than having mount_nfs.sh's `mkdir -p` fabricate a
+# bogus placeholder on whatever's there instead
+attempt=0
+max_attempts=60
+until [ -d /mnt/runtime/write/emulated/0 ]; do
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    log "error: /mnt/runtime/write/emulated/0 never appeared after $attempt attempts, giving up"
+    exit 1
+  fi
+  sleep 1
+done
+
+log "info: boot_completed, ping, & storage checks passed, invoking mount_nfs.sh"
+MODDIR=''${0%/*}
+sh "$MODDIR/mount_nfs.sh" ${nfsServer} ${nfsExportPath}
+EOF
+        chmod 0755 module/service.sh
+
+        ( cd module && zip -r ../module.zip . )
+      '';
+
+      installPhase = ''
+        mkdir -p $out
+        cp module.zip $out/
+      '';
+    };
+
   # pulls the kernel (Image.lz4-dtb) straight out of an existing boot.img -
   # used for the factory variant, where there's no source to build from,
   # just the vendor's original prebuilt kernel already sitting in the image
@@ -571,5 +659,5 @@ in
 
 {
   inherit mountingScripts marlin magiskRegistry;
-  inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkMarlinBuild mkMagiskPatchedBootImg;
+  inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkMarlinBuild mkMagiskPatchedBootImg mkNfsAutoMountMagiskModule;
 }
