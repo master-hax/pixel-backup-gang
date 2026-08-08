@@ -532,7 +532,7 @@ EOF
 
       # same source/config as stockKernel, but with NFS client support enabled
       specialNfsKernel = mkPixelKernel {
-        deviceCodename = "marlin-${buildId}-special-nfs";
+        deviceCodename = "marlin-${buildId}-specialnfs";
         inherit kernelSrc;
         defconfigFile = ./kernel/marlin_72a7a64494e_defconfig;
         extraConfig = [
@@ -545,13 +545,13 @@ EOF
         ];
       };
       stockBootImg = mkPixelRepackBootImg {
-        name = "marlin-${buildId}-stock-unrooted-bootimg";
+        name = "marlin-${buildId}-stock-nonrooted-bootimg";
         kernelPkg = stockKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
 
       specialNfsBootImg = mkPixelRepackBootImg {
-        name = "marlin-${buildId}-special-nfs-unrooted-bootimg";
+        name = "marlin-${buildId}-specialnfs-nonrooted-bootimg";
         kernelPkg = specialNfsKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
@@ -643,7 +643,7 @@ EOF
         };
 
         specialNfs = mkMagiskPatchedBootImg {
-          name = "marlin-${buildId}-special-nfs-magisk${magiskLatestVersion}-bootimg";
+          name = "marlin-${buildId}-specialnfs-magisk${magiskLatestVersion}-bootimg";
           bootImg = "${specialNfsBootImg}/boot.img";
           magiskApk = magiskRegistry.${magiskLatestVersion};
           magiskVersion = magiskLatestVersion;
