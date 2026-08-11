@@ -3,4 +3,4 @@ name=usb-unmounter
 version=v1
 versionCode=1
 author=Chris
-description=UNMOUNT Cross Mount USB external storage from internal Camera storage
+description=Unmount crossmounted USB from internal Pixel OG storage

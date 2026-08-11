@@ -1,4 +1,7 @@
-all: release/usb-mounter.zip release/usb-unmounter.zip release/wifi-adb.zip
+all: release release/usb-mounter.zip release/usb-unmounter.zip release/wifi-adb.zip
+
+release:
+	mkdir release
 
 release/usb-mounter.zip: usb-mounter/module.prop usb-mounter/action.sh
 	chmod 755 usb-mounter/action.sh
