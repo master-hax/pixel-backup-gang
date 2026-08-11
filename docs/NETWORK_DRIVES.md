@@ -48,7 +48,12 @@ to the device.
 * an NFS server with an export reachable from the pixel over the network
 
 ## acquiring the custom boot image
-builds are currently supported for marlin versions `QP1A.191005.007.A3` and `QP1A.191005.007.A1` - sailfish support coming soon.
+builds are currently supported for marlin on versions `QP1A.191005.007.A3` and `QP1A.191005.007.A1` - sailfish support coming soon.
+
+check which version you are running with `adb shell getprop ro.build.id`, or in Settings -> About phone -> Build number.
+
+> [!WARNING]  
+> do not do a system update unless your bootloader is already unlocked - updating to the latest version with a locked bootloader may lock it permanently.
 
 ### building it yourself with nix
 1. check your device's build number (Settings → About phone → Build number)
