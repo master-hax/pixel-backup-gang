@@ -64,7 +64,7 @@ check which version you are running with `adb shell getprop ro.build.id`, or in 
    * this produces `result/boot.img`
 
 ### downloading a prebuilt boot.img from github
-TODO
+download the boot image corresponding to your device & build number from the [latest release](https://github.com/master-hax/pixel-backup-gang/releases)
 
 ## flashing the custom boot image
 
@@ -72,7 +72,7 @@ ensure you have `adb` and `fastboot` available from android command-line
 tools, then connect to your pixel over USB or wifi/ethernet.
 
 1. reboot the device into the bootloader (`adb reboot bootloader`)
-1. flash it: `fastboot flash boot <path to boot.img>`
+1. flash it: `fastboot flash boot <path_to_boot.img>`
    * marlin/sailfish have both `boot_a` and `boot_b` partitions - `fastboot
      flash boot` targets whichever slot is currently active
 1. reboot: `fastboot reboot`
