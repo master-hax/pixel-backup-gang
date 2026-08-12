@@ -1,0 +1,6 @@
+id=cifs-mounter
+name=cifs-mounter
+version=v1
+versionCode=1
+author=Chris
+description=Mount CIFS then crossmount to internal Pixel OG storage
