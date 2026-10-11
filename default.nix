@@ -33,6 +33,7 @@ let
       kernelSrcSha256 = "sha256-CdM0PkUGkm1SVAT/J2QywX15cN/J5nWMqrrI9E6CxnM=";
       factoryImageUrl = "https://dl.google.com/dl/android/aosp/marlin-qp1a.191005.007.a3-factory-bef66533.zip";
       factoryImageSha256 = "bef6653301371b66bd7fca968cf52013c0bf6862f0c7a70a275b0f0d45ab3888";
+      defconfigSha256 = "33e5abc5f841ecf43b3317b5a23b0c6ea330eeba977615f815a43e2d9084ae6d";
     };
 
     # same underlying build as A3 (10.0.0, Oct 2019), different carrier/region
@@ -42,6 +43,7 @@ let
       kernelSrcSha256 = "sha256-CdM0PkUGkm1SVAT/J2QywX15cN/J5nWMqrrI9E6CxnM=";
       factoryImageUrl = "https://dl.google.com/dl/android/aosp/marlin-qp1a.191005.007.a1-factory-c27241e0.zip";
       factoryImageSha256 = "c27241e0aaf46f4ff60d8279efd9ac6f6ac8e80b1bd08c43d75f851313efaa12";
+      defconfigSha256 = "33e5abc5f841ecf43b3317b5a23b0c6ea330eeba977615f815a43e2d9084ae6d";
     };
 
     # 10.0.0, Sep 2019 - earlier build, distinct kernel commit (different
@@ -51,6 +53,8 @@ let
       kernelSrcSha256 = "sha256-/Th9FaDosF6PDlyBkXW7MRL/SEi+UkDSvkCOY5Vm3yY=";
       factoryImageUrl = "https://dl.google.com/dl/android/aosp/marlin-qp1a.190711.020-factory-2db5273a.zip";
       factoryImageSha256 = "2db5273a273a491fee3e175f3018830fc58015bdbacfedb589d67acf123156f8";
+      # differs from the sha256 above by CONFIG_MSM_SMP2P_TEST
+      defconfigSha256 = "e3eb97fe94b9224dd1705d42f2fa58bb8fb2759f1108912c0c139b9589a4bf88";
     };
   };
 
@@ -167,6 +171,41 @@ let
       installPhase = ''
         mkdir -p $out
         cp "$OUT_DIR"/arch/arm64/boot/Image.lz4-dtb $out/
+      '';
+    };
+
+  # generates a kernel .config via the kernel source's own defconfig target -
+  # should match the one pulled from a real device
+  mkPixelGeneratedDefconfig = { kernelSrc, defconfigTarget }:
+    pkgs.stdenv.mkDerivation {
+      pname = "${defconfigTarget}-generated";
+      version = "3.18.137";
+
+      src = kernelSrc;
+
+      nativeBuildInputs = with pkgs; [ bc bison flex perl which ];
+
+      postPatch = ''
+        # /bin/pwd doesn't exist in the Nix sandbox - use pwd via PATH instead
+        # (needed for O= out-of-tree builds)
+        sed -i 's|/bin/pwd|pwd|' Makefile
+      '';
+
+      dontConfigure = true;
+
+      buildPhase = ''
+        export ARCH=arm64
+        export OUT_DIR=$PWD/out
+        mkdir -p "$OUT_DIR"
+
+        # same workaround as mkPixelKernel - the Kconfig host tools hit it too
+        export HOSTCFLAGS=-fcommon
+
+        make O="$OUT_DIR" HOSTCFLAGS=-fcommon ${defconfigTarget}
+      '';
+
+      installPhase = ''
+        cp "$OUT_DIR"/.config $out
       '';
     };
 
@@ -509,7 +548,7 @@ EOF
 
   # builds every output (kernel, factory image extraction, repacked boot images)
   # for one marlinBuildRegistry entry
-  mkMarlinBuild = buildId: { kernelSrcRev, kernelSrcSha256, factoryImageUrl, factoryImageSha256 }:
+  mkMarlinBuild = buildId: { kernelSrcRev, kernelSrcSha256, factoryImageUrl, factoryImageSha256, defconfigSha256 }:
     let
       kernelSrc = pkgs.fetchgit {
         url = "https://android.googlesource.com/kernel/msm";
@@ -524,17 +563,22 @@ EOF
 
       factoryBootImg = mkPixelFactoryBootImg { inherit factoryImage; };
 
+      generatedDefconfig = mkPixelGeneratedDefconfig {
+        inherit kernelSrc;
+        defconfigTarget = "marlin_defconfig";
+      };
+
       stockKernel = mkPixelKernel {
         deviceCodename = "marlin-${buildId}";
         inherit kernelSrc;
-        defconfigFile = ./kernel/marlin_72a7a64494e_defconfig;
+        defconfigFile = generatedDefconfig;
       };
 
       # same source/config as stockKernel, but with NFS client support enabled
       specialNfsKernel = mkPixelKernel {
         deviceCodename = "marlin-${buildId}-specialnfs";
         inherit kernelSrc;
-        defconfigFile = ./kernel/marlin_72a7a64494e_defconfig;
+        defconfigFile = generatedDefconfig;
         extraConfig = [
           # NFS_FS is gated behind NETWORK_FILESYSTEMS, which our base config
           # disables - enable it first or olddefconfig silently drops NFS_FS again
@@ -604,6 +648,12 @@ EOF
           dd if=${factoryBootImg}/boot.img of=ours.img bs=1 skip=28 seek=28 count=4 conv=notrunc status=none
 
           cmp -n "$our_size" ${factoryBootImg}/boot.img ours.img
+          touch $out
+        '';
+
+        # fails if the generated config ever drifts from defconfigSha256
+        generatedDefconfigMatches = pkgs.runCommand "marlin-${buildId}-generated-defconfig-check" {} ''
+          echo "${defconfigSha256}  ${generatedDefconfig}" | sha256sum -c -
           touch $out
         '';
       };
