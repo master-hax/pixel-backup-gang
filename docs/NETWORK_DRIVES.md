@@ -48,7 +48,7 @@ to the device.
 * an NFS server with an export reachable from the pixel over the network
 
 ## acquiring the custom boot image
-builds are currently supported for marlin on versions `QP1A.191005.007.A3` and `QP1A.191005.007.A1` - sailfish support coming soon.
+builds are currently supported for marlin and sailfish, both on versions `QP1A.191005.007.A3` and `QP1A.191005.007.A1`.
 
 check which version you are running with `adb shell getprop ro.build.id`, or in Settings -> About phone -> Build number.
 
@@ -57,9 +57,9 @@ check which version you are running with `adb shell getprop ro.build.id`, or in 
 
 ### building it yourself with nix
 1. check your device's build number (Settings → About phone → Build number)
-1. build it, substituting your device codename (`marlin`, currently the only
-   one supported) and build number for `<BUILD_ID>`:
-   `nix build 'github:master-hax/pixel-backup-gang#marlin."<BUILD_ID>".magiskBootImages.specialNfs'`
+1. build it, substituting your device codename (`marlin` or `sailfish`) and
+   build number for `<BUILD_ID>`:
+   `nix build 'github:master-hax/pixel-backup-gang#<DEVICE_CODENAME>."<BUILD_ID>".magiskBootImages.specialNfs'`
    * e.g. `nix build 'github:master-hax/pixel-backup-gang#marlin."QP1A.191005.007.A3".magiskBootImages.specialNfs'`
    * this produces `result/boot.img`
 

@@ -24,7 +24,7 @@ let
   };
 
   # supported marlin OS builds, keyed by build id (ro.build.id). add an entry
-  # here for another device/OS version - mkMarlinBuild below generates
+  # here for another device/OS version - mkPixelBuild below generates
   # everything else (kernel, factory extraction, repacked boot images) from it
   marlinBuildRegistry = {
     "QP1A.191005.007.A3" = {
@@ -55,6 +55,25 @@ let
       factoryImageSha256 = "2db5273a273a491fee3e175f3018830fc58015bdbacfedb589d67acf123156f8";
       # differs from the sha256 above by CONFIG_MSM_SMP2P_TEST
       defconfigSha256 = "e3eb97fe94b9224dd1705d42f2fa58bb8fb2759f1108912c0c139b9589a4bf88";
+    };
+  };
+
+  # sailfish shares marlin's kernel tree & defconfig - only the factory image differs
+  sailfishBuildRegistry = {
+    "QP1A.191005.007.A3" = {
+      kernelSrcRev = "72a7a64494e033f2213c9701dbf137d277bf2026";
+      kernelSrcSha256 = "sha256-CdM0PkUGkm1SVAT/J2QywX15cN/J5nWMqrrI9E6CxnM=";
+      factoryImageUrl = "https://dl.google.com/dl/android/aosp/sailfish-qp1a.191005.007.a3-factory-d4552659.zip";
+      factoryImageSha256 = "d455265945bb936a653730031af7d7a4aba70dc0c775024666a53491c9833b61";
+      defconfigSha256 = "33e5abc5f841ecf43b3317b5a23b0c6ea330eeba977615f815a43e2d9084ae6d";
+    };
+
+    "QP1A.191005.007.A1" = {
+      kernelSrcRev = "72a7a64494e033f2213c9701dbf137d277bf2026";
+      kernelSrcSha256 = "sha256-CdM0PkUGkm1SVAT/J2QywX15cN/J5nWMqrrI9E6CxnM=";
+      factoryImageUrl = "https://dl.google.com/dl/android/aosp/sailfish-qp1a.191005.007.a1-factory-78c6703e.zip";
+      factoryImageSha256 = "78c6703ea4473ed65c51d6e258bb67368962bd13aad3975db08b42c7b8d49cb0";
+      defconfigSha256 = "33e5abc5f841ecf43b3317b5a23b0c6ea330eeba977615f815a43e2d9084ae6d";
     };
   };
 
@@ -546,9 +565,8 @@ EOF
     rev = "0f5ac4a0fb21cff9cdd55c858380f426f8e5fd1b";
   };
 
-  # builds every output (kernel, factory image extraction, repacked boot images)
-  # for one marlinBuildRegistry entry
-  mkMarlinBuild = buildId: { kernelSrcRev, kernelSrcSha256, factoryImageUrl, factoryImageSha256, defconfigSha256 }:
+  # builds every output for one marlinBuildRegistry/sailfishBuildRegistry entry
+  mkPixelBuild = deviceCodename: buildId: { kernelSrcRev, kernelSrcSha256, factoryImageUrl, factoryImageSha256, defconfigSha256 }:
     let
       kernelSrc = pkgs.fetchgit {
         url = "https://android.googlesource.com/kernel/msm";
@@ -569,14 +587,14 @@ EOF
       };
 
       stockKernel = mkPixelKernel {
-        deviceCodename = "marlin-${buildId}";
+        deviceCodename = "${deviceCodename}-${buildId}";
         inherit kernelSrc;
         defconfigFile = generatedDefconfig;
       };
 
       # same source/config as stockKernel, but with NFS client support enabled
       specialNfsKernel = mkPixelKernel {
-        deviceCodename = "marlin-${buildId}-specialnfs";
+        deviceCodename = "${deviceCodename}-${buildId}-specialnfs";
         inherit kernelSrc;
         defconfigFile = generatedDefconfig;
         extraConfig = [
@@ -589,13 +607,13 @@ EOF
         ];
       };
       stockBootImg = mkPixelRepackBootImg {
-        name = "marlin-${buildId}-stock-nonrooted-bootimg";
+        name = "${deviceCodename}-${buildId}-stock-nonrooted-bootimg";
         kernelPkg = stockKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
 
       specialNfsBootImg = mkPixelRepackBootImg {
-        name = "marlin-${buildId}-specialnfs-nonrooted-bootimg";
+        name = "${deviceCodename}-${buildId}-specialnfs-nonrooted-bootimg";
         kernelPkg = specialNfsKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
@@ -604,14 +622,14 @@ EOF
       # the factory boot.img itself
       factoryKernel = mkPixelExtractedKernel {
         bootImg = "${factoryBootImg}/boot.img";
-        pname = "marlin-${buildId}-factory-kernel";
+        pname = "${deviceCodename}-${buildId}-factory-kernel";
       };
 
       # repacking factoryBootImg's own extracted kernel back into a boot.img
       # should reproduce factoryBootImg exactly - see the
       # factoryKernelRoundtrip check below, which asserts this
       factoryBootImgRoundtrip = mkPixelRepackBootImg {
-        name = "marlin-${buildId}-factory-roundtrip-bootimg";
+        name = "${deviceCodename}-${buildId}-factory-roundtrip-bootimg";
         kernelPkg = factoryKernel;
         bootImg = "${factoryBootImg}/boot.img";
       };
@@ -640,7 +658,7 @@ EOF
         # - everything past our repacked image's length: the original has a
         #   trailing Google-signed boot signature (private-key signed
         #   ASN.1/PKCS#7 blob) we have no way to reproduce
-        factoryKernelRoundtrip = pkgs.runCommand "marlin-${buildId}-factory-kernel-roundtrip-test" {} ''
+        factoryKernelRoundtrip = pkgs.runCommand "${deviceCodename}-${buildId}-factory-kernel-roundtrip-test" {} ''
           our_size=$(stat -c%s ${factoryBootImgRoundtrip}/boot.img)
 
           cp ${factoryBootImgRoundtrip}/boot.img ours.img
@@ -652,7 +670,7 @@ EOF
         '';
 
         # fails if the generated config ever drifts from defconfigSha256
-        generatedDefconfigMatches = pkgs.runCommand "marlin-${buildId}-generated-defconfig-check" {} ''
+        generatedDefconfigMatches = pkgs.runCommand "${deviceCodename}-${buildId}-generated-defconfig-check" {} ''
           echo "${defconfigSha256}  ${generatedDefconfig}" | sha256sum -c -
           touch $out
         '';
@@ -672,19 +690,17 @@ EOF
       # mkMagiskPatchedBootImg directly for a different Magisk version
       magiskBootImages = {
         factory = mkMagiskPatchedBootImg {
-          name = "marlin-${buildId}-factory-magisk${magiskLatestVersion}-bootimg";
+          name = "${deviceCodename}-${buildId}-factory-magisk${magiskLatestVersion}-bootimg";
           bootImg = "${factoryBootImg}/boot.img";
           magiskApk = magiskRegistry.${magiskLatestVersion};
           magiskVersion = magiskLatestVersion;
-          # confirmed via /proc/self/mountinfo + ro.crypto.* on the real
-          # device: no metadata/cache partition, /persist exists (ext4, rw) -
-          # matches what magisk's find_preinit_device() would pick
+          # confirmed on real marlin hw, reused as-is for sailfish (same SoC)
           preinitDevice = "persist";
           legacySAR = true;
         };
 
         stock = mkMagiskPatchedBootImg {
-          name = "marlin-${buildId}-stock-magisk${magiskLatestVersion}-bootimg";
+          name = "${deviceCodename}-${buildId}-stock-magisk${magiskLatestVersion}-bootimg";
           bootImg = "${stockBootImg}/boot.img";
           magiskApk = magiskRegistry.${magiskLatestVersion};
           magiskVersion = magiskLatestVersion;
@@ -693,7 +709,7 @@ EOF
         };
 
         specialNfs = mkMagiskPatchedBootImg {
-          name = "marlin-${buildId}-specialnfs-magisk${magiskLatestVersion}-bootimg";
+          name = "${deviceCodename}-${buildId}-specialnfs-magisk${magiskLatestVersion}-bootimg";
           bootImg = "${specialNfsBootImg}/boot.img";
           magiskApk = magiskRegistry.${magiskLatestVersion};
           magiskVersion = magiskLatestVersion;
@@ -703,11 +719,12 @@ EOF
       };
     };
 
-  marlin = pkgs.lib.mapAttrs mkMarlinBuild marlinBuildRegistry;
+  marlin = pkgs.lib.mapAttrs (mkPixelBuild "marlin") marlinBuildRegistry;
+  sailfish = pkgs.lib.mapAttrs (mkPixelBuild "sailfish") sailfishBuildRegistry;
 
 in
 
 {
-  inherit mountingScripts marlin magiskRegistry;
-  inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkMarlinBuild mkMagiskPatchedBootImg mkNfsAutoMountMagiskModule;
+  inherit mountingScripts marlin sailfish magiskRegistry;
+  inherit mkPixelKernel mkPixelFactoryBootImg mkPixelRepackBootImg mkPixelBuild mkMagiskPatchedBootImg mkNfsAutoMountMagiskModule;
 }

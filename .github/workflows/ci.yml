@@ -31,6 +31,10 @@ jobs:
             build_id: "QP1A.191005.007.A3"
           - codename: marlin
             build_id: "QP1A.191005.007.A1"
+          - codename: sailfish
+            build_id: "QP1A.191005.007.A3"
+          - codename: sailfish
+            build_id: "QP1A.191005.007.A1"
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # https://github.com/actions/checkout/tree/v4.2.2
