@@ -1,0 +1,6 @@
+id=usb-unmounter
+name=usb-unmounter
+version=v1
+versionCode=1
+author=Chris
+description=Unmount crossmounted USB from internal Pixel OG storage

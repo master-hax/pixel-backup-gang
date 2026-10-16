@@ -1,0 +1,6 @@
+id=wifi-adb
+name=wifi-adb
+version=v1
+versionCode=1
+author=Chris
+description=Starts wifi adb to port 5555

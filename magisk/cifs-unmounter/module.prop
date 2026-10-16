@@ -1,0 +1,6 @@
+id=cifs-unmounter
+name=cifs-unmounter
+version=v1
+versionCode=1
+author=Chris
+description=Unmount crossmounted CIFS from internal Pixel OG storage
