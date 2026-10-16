@@ -91,10 +91,9 @@ fi
 # TODO: use sdcardfs's mask= mount option instead of chmod -R 777 here, so we
 # don't have to recursively rewrite permissions on the actual NFS export.
 # not fatal: pre-existing files owned by a different NFS-squashed uid can't
-# be chmod'd (EPERM) even though the mount itself is fine. per-file errors
-# are dropped, since there's one per file & they flood dmesg on big exports
+# be chmod'd (EPERM) even though the mount itself is fine
 log "info: relaxing permissions on the_binding"
-chmod -R 777 "$drive_mount_dir"/the_binding 2>/dev/null \
+chmod -R 777 "$drive_mount_dir"/the_binding \
   || log "warning: chmod -R 777 failed on some files (owned by a different NFS uid?), continuing anyway"
 
 log "info: binding the_binding into internal storage at $internal_binding_dir"

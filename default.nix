@@ -382,7 +382,7 @@ until [ -d /mnt/runtime/write/emulated/0 ]; do
   sleep 1
 done
 
-log "info: boot_completed, unlock, ping, & storage checks passed, invoking mount_nfs.sh"
+log "info: boot_completed, ping, & storage checks passed, invoking mount_nfs.sh"
 MODDIR=''${0%/*}
 # mount_nfs.sh unmounts any previous attempt first, so it's safe to re-run.
 # retry to ride out transient server-side failures right after boot
