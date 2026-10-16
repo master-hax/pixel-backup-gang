@@ -324,35 +324,31 @@ EOF
         cp ${./scripts/mount_nfs.sh} module/mount_nfs.sh
         chmod 0755 module/mount_nfs.sh
 
-        # what magiskd runs at boot - waits for boot_completed and for the
-        # server to answer a ping (Wi-Fi may not be up yet), then calls
-        # mount_nfs.sh via `sh` (its executable bit may not survive install)
+        # what magiskd runs at boot - waits for boot_completed, for the user
+        # to unlock, and for the server to answer a ping (Wi-Fi may not be up
+        # yet), then calls mount_nfs.sh via `sh` (its executable bit may not
+        # survive install)
         cat > module/service.sh <<'EOF'
 #!/system/bin/sh
 exec >>/dev/kmsg 2>&1
 log() { echo "pbg: service.sh: $*"; }
 log "info: invoked at boot, mounting ${nfsServer}:${nfsExportPath}"
 
-attempt=0
-max_attempts=60
+# none of these checks time out - the phone can sit at the lock screen, or
+# off Wi-Fi, indefinitely, & the mount should still happen once it's ready
 until [ "$(getprop sys.boot_completed)" = "1" ]; do
-  attempt=$((attempt + 1))
-  if [ "$attempt" -ge "$max_attempts" ]; then
-    log "error: sys.boot_completed never became 1 after $attempt attempts, giving up"
-    exit 1
-  fi
   sleep 1
 done
 
-attempt=0
-max_attempts=60
+# user 0's credential-encrypted storage only comes up after the first unlock.
+# /mnt/runtime/write/emulated/0 already exists while the user is still
+# RUNNING_LOCKED, but creating anything under it fails (ENOENT) until then
+log "info: waiting for user 0 to unlock"
+until [ "$(am get-started-user-state 0 2>/dev/null)" = "RUNNING_UNLOCKED" ]; do
+  sleep 1
+done
+
 until ping -c 1 -W 1 ${nfsServer} >/dev/null 2>&1; do
-  ping_status=$?
-  attempt=$((attempt + 1))
-  if [ "$attempt" -ge "$max_attempts" ]; then
-    log "error: ${nfsServer} unreachable after $attempt attempts (last ping exit $ping_status), giving up"
-    exit 1
-  fi
   sleep 1
 done
 
@@ -361,14 +357,7 @@ done
 # yet, which is what actually brings this up. wait for the real mountpoint
 # to already exist rather than having mount_nfs.sh's `mkdir -p` fabricate a
 # bogus placeholder on whatever's there instead
-attempt=0
-max_attempts=60
 until [ -d /mnt/runtime/write/emulated/0 ]; do
-  attempt=$((attempt + 1))
-  if [ "$attempt" -ge "$max_attempts" ]; then
-    log "error: /mnt/runtime/write/emulated/0 never appeared after $attempt attempts, giving up"
-    exit 1
-  fi
   sleep 1
 done
 

@@ -80,8 +80,13 @@ mount \
     "$nfs_export" "$drive_mount_dir" \
   || { log "error: nfs mount failed (exit $?) - is the server reachable & export path correct?"; exit 1; }
 
-mkdir -p -v "$drive_mount_dir"/the_binding \
-  || { log "error: mkdir $drive_mount_dir/the_binding failed (exit $?)"; exit 1; }
+# only create the_binding if it's missing - toybox 0.8.0's `mkdir -p`
+# (Android 10) calls mkdir() even when the directory already exists & fails
+# on any error other than EEXIST, unlike newer toybox which skips it
+if [ ! -d "$drive_mount_dir"/the_binding ]; then
+  mkdir -p -v "$drive_mount_dir"/the_binding \
+    || { log "error: mkdir $drive_mount_dir/the_binding failed (exit $?)"; exit 1; }
+fi
 # TODO: use sdcardfs's mask= mount option instead of chmod -R 777 here, so we
 # don't have to recursively rewrite permissions on the actual NFS export.
 # not fatal: pre-existing files owned by a different NFS-squashed uid can't
