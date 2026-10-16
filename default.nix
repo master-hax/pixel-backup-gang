@@ -345,7 +345,7 @@ done
 # RUNNING_LOCKED, but creating anything under it fails (ENOENT) until then
 log "info: waiting for user 0 to unlock"
 until [ "$(am get-started-user-state 0 2>/dev/null)" = "RUNNING_UNLOCKED" ]; do
-  sleep 2
+  sleep 1
 done
 
 until ping -c 1 -W 1 ${nfsServer} >/dev/null 2>&1; do

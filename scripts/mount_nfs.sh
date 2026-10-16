@@ -80,10 +80,9 @@ mount \
     "$nfs_export" "$drive_mount_dir" \
   || { log "error: nfs mount failed (exit $?) - is the server reachable & export path correct?"; exit 1; }
 
-# only create the_binding if it's missing - on a fresh mount the NFS client
-# sends MKDIR to the server even when the directory already exists, and the
-# server can refuse it (e.g. EROFS or EACCES on a read-only or squashed
-# export) although the existing directory is perfectly usable
+# only create the_binding if it's missing - toybox 0.8.0's `mkdir -p`
+# (Android 10) calls mkdir() even when the directory already exists & fails
+# on any error other than EEXIST, unlike newer toybox which skips it
 if [ ! -d "$drive_mount_dir"/the_binding ]; then
   mkdir -p -v "$drive_mount_dir"/the_binding \
     || { log "error: mkdir $drive_mount_dir/the_binding failed (exit $?)"; exit 1; }
