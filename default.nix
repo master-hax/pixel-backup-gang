@@ -324,9 +324,10 @@ EOF
         cp ${./scripts/mount_nfs.sh} module/mount_nfs.sh
         chmod 0755 module/mount_nfs.sh
 
-        # what magiskd runs at boot - waits for boot_completed and for the
-        # server to answer a ping (Wi-Fi may not be up yet), then calls
-        # mount_nfs.sh via `sh` (its executable bit may not survive install)
+        # what magiskd runs at boot - waits for boot_completed, for the user
+        # to unlock, and for the server to answer a ping (Wi-Fi may not be up
+        # yet), then calls mount_nfs.sh via `sh` (its executable bit may not
+        # survive install), retrying a few times if it fails
         cat > module/service.sh <<'EOF'
 #!/system/bin/sh
 exec >>/dev/kmsg 2>&1
@@ -342,6 +343,15 @@ until [ "$(getprop sys.boot_completed)" = "1" ]; do
     exit 1
   fi
   sleep 1
+done
+
+# user 0's credential-encrypted storage only comes up after the first unlock.
+# /mnt/runtime/write/emulated/0 already exists while the user is still
+# RUNNING_LOCKED, but creating anything under it fails (ENOENT) until then.
+# no timeout - the phone can sit at the lock screen indefinitely
+log "info: waiting for user 0 to unlock"
+until [ "$(am get-started-user-state 0 2>/dev/null)" = "RUNNING_UNLOCKED" ]; do
+  sleep 2
 done
 
 attempt=0
@@ -372,9 +382,22 @@ until [ -d /mnt/runtime/write/emulated/0 ]; do
   sleep 1
 done
 
-log "info: boot_completed, ping, & storage checks passed, invoking mount_nfs.sh"
+log "info: boot_completed, unlock, ping, & storage checks passed, invoking mount_nfs.sh"
 MODDIR=''${0%/*}
-sh "$MODDIR/mount_nfs.sh" ${nfsServer} ${nfsExportPath}
+# mount_nfs.sh unmounts any previous attempt first, so it's safe to re-run.
+# retry to ride out transient server-side failures right after boot
+attempt=0
+max_attempts=5
+until sh "$MODDIR/mount_nfs.sh" ${nfsServer} ${nfsExportPath}; do
+  mount_status=$?
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge "$max_attempts" ]; then
+    log "error: mount_nfs.sh failed $attempt times (last exit $mount_status), giving up"
+    exit 1
+  fi
+  log "warning: mount_nfs.sh failed (exit $mount_status), retrying in 10s ($attempt/$max_attempts)"
+  sleep 10
+done
 EOF
         chmod 0755 module/service.sh
 
